@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MATH-CONNECT - Petualangan Relasi & Fungsi Kelas 8 SMP</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- Google Fonts: Fredoka & Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    h1, h2, h3, .font-game { font-family: 'Fredoka', cursive; }
+    .tab-active { background: #4F46E5 !important; color: #FFFFFF !important; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4); }
+    .node-pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    .interactive-card { transition: all 0.3s ease; }
+    .interactive-card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px -5px rgba(236, 72, 153, 0.25); }
+  </style>
+</head>
+<body class="bg-indigo-950 text-slate-100 min-h-screen flex flex-col selection:bg-pink-500 selection:text-white">
+
+  <!-- TOP GAME HEADER -->
+  <header class="bg-indigo-900/90 backdrop-blur-md border-b-4 border-indigo-700 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+      
+      <!-- LOGO -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+        <div class="w-12 h-12 bg-gradient-to-tr from-pink-500 to-amber-400 rounded-2xl flex items-center justify-center font-game text-2xl text-white shadow-lg border-2 border-white/40">
+          ⚡
+        </div>
+        <div>
+          <h1 class="font-game text-2xl text-amber-300 tracking-wider leading-none drop-shadow">MATH-CONNECT</h1>
+          <p class="text-xs text-pink-300 font-bold">Relasi & Fungsi Kelas 8 SMP</p>
+        </div>
+      </div>
+
+      <!-- NAV TABS -->
+      <nav class="hidden xl:flex items-center gap-1 bg-indigo-950/80 p-1.5 rounded-2xl border-2 border-indigo-800 overflow-x-auto">
+        <button onclick="switchTab('home')" id="nav-home" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition tab-active whitespace-nowrap">
+          <i class="fa-solid fa-gamepad mr-1"></i> Home
+        </button>
+        <button onclick="switchTab('materi_dasar')" id="nav-materi_dasar" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          <i class="fa-solid fa-video mr-1"></i> Video
+        </button>
+        <button onclick="switchTab('pertemuan1')" id="nav-pertemuan1" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          1. Konsep Dasar
+        </button>
+        <button onclick="switchTab('pertemuan2')" id="nav-pertemuan2" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          2. Syarat Fungsi
+        </button>
+        <button onclick="switchTab('pertemuan3')" id="nav-pertemuan3" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          3. Subtitusi Dasar
+        </button>
+        <button onclick="switchTab('pertemuan4')" id="nav-pertemuan4" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          4. Subtitusi Advance
+        </button>
+        <button onclick="switchTab('pertemuan5')" id="nav-pertemuan5" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          5. Pemodelan
+        </button>
+        <button onclick="switchTab('simulasi')" id="nav-simulasi" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          <i class="fa-solid fa-flask-vial mr-1"></i> Lab Simulasi
+        </button>
+        <button onclick="switchTab('soal')" id="nav-soal" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          <i class="fa-solid fa-trophy mr-1"></i> Bank Soal (50)
+        </button>
+        <button onclick="switchTab('checkpoint')" id="nav-checkpoint" class="px-3 py-2 text-xs font-bold rounded-xl text-indigo-200 hover:text-white transition whitespace-nowrap">
+          <i class="fa-solid fa-map-location-dot mr-1"></i> Quest Map
+        </button>
+      </nav>
+
+      <!-- USER STATS -->
+      <div class="flex items-center gap-3">
+        <div class="bg-amber-500/20 border-2 border-amber-400/50 px-3 py-1.5 rounded-2xl flex items-center gap-2">
+          <span class="text-lg">🦊</span>
+          <div>
+            <p class="text-[10px] font-bold text-amber-300 uppercase leading-none">Math Cadet</p>
+            <p class="text-xs font-extrabold text-amber-400" id="user-xp">350 XP</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MOBILE/RESPONSIVE NAV BAR -->
+  <div class="xl:hidden bg-indigo-900 border-b border-indigo-800 p-2 flex flex-wrap justify-center gap-1">
+    <button onclick="switchTab('home')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">Home</button>
+    <button onclick="switchTab('materi_dasar')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">Video</button>
+    <button onclick="switchTab('pertemuan1')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">P1</button>
+    <button onclick="switchTab('pertemuan2')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">P2</button>
+    <button onclick="switchTab('pertemuan3')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">P3</button>
+    <button onclick="switchTab('pertemuan4')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">P4</button>
+    <button onclick="switchTab('pertemuan5')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">P5</button>
+    <button onclick="switchTab('simulasi')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">Simulasi</button>
+    <button onclick="switchTab('soal')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">Soal</button>
+    <button onclick="switchTab('checkpoint')" class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg bg-indigo-800 text-white">Map</button>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+    <!-- 1. HOME TAB -->
+    <section id="tab-home" class="space-y-6">
+      <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-500 rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-indigo-400/30 relative overflow-hidden">
+        <div class="max-w-3xl relative z-10 space-y-4">
+          <span class="bg-amber-400 text-indigo-950 font-game text-xs px-4 py-1.5 rounded-full uppercase tracking-widest shadow">
+            🚀 Penelitian KTI - Media Pembelajaran Interaktif Kelas 8
+          </span>
+          <h2 class="font-game text-4xl md:text-6xl text-white leading-tight drop-shadow-md">
+            Hubungkan Angka, Taklukkan <span class="text-amber-300">Fungsi!</span>
+          </h2>
+          <p class="text-indigo-100 text-sm md:text-base leading-relaxed">
+            MATH-CONNECT adalah media pembelajaran interaktif berbasis gamifikasi yang dikembangkan melalui teknologi AI sebagai instrumen pendukung dalam penelitian Karya Tulis Ilmiah (KTI) saya. Website ini dirancang khusus untuk membantu siswa kelas 8 SMP memahami konsep Relasi dan Fungsi secara komprehensif, menyenangkan, dan aplikatif.
+          </p>
+          <div class="flex flex-wrap gap-4 pt-2">
+            <button onclick="switchTab('pertemuan1')" class="bg-amber-400 hover:bg-amber-300 text-indigo-950 font-game text-base px-6 py-3 rounded-2xl shadow-xl hover:scale-105 transition border-b-4 border-amber-600">
+              📚 Mulai Materi P1
+            </button>
+            <button onclick="switchTab('simulasi')" class="bg-pink-500 hover:bg-pink-400 text-white font-game text-base px-6 py-3 rounded-2xl shadow-xl hover:scale-105 transition border-b-4 border-pink-700">
+              🎮 Coba Lab Simulasi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-indigo-900/80 border-2 border-indigo-700 p-6 rounded-3xl space-y-3 hover:border-pink-500 transition">
+          <div class="w-12 h-12 bg-pink-500/20 text-pink-400 rounded-2xl flex items-center justify-center text-2xl font-bold">🎯</div>
+          <h3 class="font-game text-xl text-amber-300">5 Pertemuan Terstruktur</h3>
+          <p class="text-xs text-indigo-200 leading-relaxed">Materi lengkap mulai dari konsep dasar relasi, membedakan fungsi dan bukan fungsi, subtitusi dasar, analisis rumus f(x)=ax+b, fungsi pada kehidupan sehari hari dalam bentuk soal cerita.</p>
+        </div>
+        <div class="bg-indigo-900/80 border-2 border-indigo-700 p-6 rounded-3xl space-y-3 hover:border-amber-400 transition">
+          <div class="w-12 h-12 bg-amber-400/20 text-amber-400 rounded-2xl flex items-center justify-center text-2xl font-bold">🧪</div>
+          <h3 class="font-game text-xl text-amber-300">Lab Simulasi Interaktif</h3>
+          <p class="text-xs text-indigo-200 leading-relaxed">Mesin Fungsi Input-Output untuk memvisualisasikan teori abstrak matematika secara visual dan interaktif.</p>
+        </div>
+        <div class="bg-indigo-900/80 border-2 border-indigo-700 p-6 rounded-3xl space-y-3 hover:border-emerald-400 transition">
+          <div class="w-12 h-12 bg-emerald-400/20 text-emerald-400 rounded-2xl flex items-center justify-center text-2xl font-bold">🏆</div>
+          <h3 class="font-game text-xl text-amber-300">Bank Soal (50 Soal)</h3>
+          <p class="text-xs text-indigo-200 leading-relaxed">Latihan 5 level dengan masing-masing 10 soal komprehensif lengkap beserta pembahasannya.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. KUMPULAN VIDEO PEMBELAJARAN TAB -->
+    <section id="tab-materi_dasar" class="hidden space-y-6">
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-10 rounded-3xl space-y-6 text-center">
+        <div class="max-w-2xl mx-auto space-y-3">
+          <div class="w-16 h-16 bg-pink-500/20 text-pink-400 rounded-3xl flex items-center justify-center text-3xl mx-auto border-2 border-pink-500/40">
+            🎬
+          </div>
+          <h2 class="font-game text-3xl text-amber-300">KUMPULAN VIDEO PEMBELAJARAN</h2>
+          <p class="text-xs md:text-sm text-indigo-200 leading-relaxed">
+            Akses seluruh bank video yang disiapkan untuk mendukung pemahaman terhadap matematika. Berisi link video YouTube dari materi dasar aritmatika (pembagian bersusun) hingga materi relasi dan fungsi.
+          </p>
+        </div>
+
+        <div class="pt-4">
+          <a href="https://drive.google.com/drive/folders/1iaXr_7vi_sOwXA46kefNDqmNlCyDQwz9?usp=sharing" target="_blank" class="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500 to-amber-400 text-indigo-950 font-game text-base px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition border-b-4 border-amber-600 font-bold">
+            <i class="fa-brands fa-google-drive text-xl"></i> Buka Google Drive Video Pembelajaran
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PERTEMUAN 1: 1. Konsep Dasar -->
+    <section id="tab-pertemuan1" class="hidden space-y-6">
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-4 shadow-xl">
+        <div class="flex items-center gap-3">
+          <span class="bg-emerald-500 text-indigo-950 font-game text-xs px-3.5 py-1.5 rounded-full uppercase font-bold shadow">
+            Pertemuan 1
+          </span>
+          <span class="text-xs text-pink-300 font-bold uppercase tracking-wider">Materi Penelitian KTI Kelas 8</span>
+        </div>
+        <h2 class="font-game text-3xl md:text-4xl text-amber-300">
+          Pondasi Konsep Relasi, Fungsi, dan Unsur-Unsurnya
+        </h2>
+        <p class="text-xs md:text-sm text-indigo-200 leading-relaxed">
+          Modul interaktif ini membangun bayangan visual pertama siswa tentang bagaimana dua himpunan dihubungkan, memahami unsur Domain-Kodomain-Range, menguasai trik membaca relasi khusus, serta cara mengubah bentuk fungsi.
+        </p>
+      </div>
+
+      <!-- BAGIAN 1: PENGERTIAN FUNGSI & ILUSTRASI MESIN -->
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 rounded-3xl space-y-6">
+        <div class="flex items-center gap-2 border-b border-indigo-800 pb-3">
+          <span class="text-2xl">🥤</span>
+          <h3 class="font-game text-2xl text-pink-400">1. Pengertian Fungsi & Konsep Mesin Pemroses</h3>
+        </div>
+
+        <div class="bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-indigo-500/20 border-2 border-pink-400 p-5 rounded-2xl text-center space-y-2 shadow-lg">
+          <h4 class="font-game text-lg text-amber-300">Definisi Resmi:</h4>
+          <p class="text-sm md:text-base text-indigo-100 leading-relaxed">
+            <strong>Fungsi</strong>, yaitu suatu relasi yang menghubungkan satu anggota dari suatu himpunan <span class="text-amber-300 font-bold underline decoration-pink-400 decoration-2">tepat ke satu</span> anggota di himpunan yang lain.
+          </p>
+          <p class="text-xs text-indigo-200 font-mono pt-1">
+            Fungsi biasa dinyatakan dalam bentuk f(x) = y, di mana f merupakan fungsi, x merupakan variabel masukan (input), dan y merupakan variabel keluaran (output).
+          </p>
+        </div>
+
+        <div class="bg-indigo-950 p-6 rounded-2xl border border-indigo-800 space-y-4">
+          <h4 class="font-game text-base text-cyan-300 text-center">💡 Konsep Visual: Fungsi sebagai Mesin Blender</h4>
+          <p class="text-xs text-indigo-300 text-center">Konsep ini dapat dipahami dengan membayangkan fungsi sebagai mesin pemroses seperti ilustrasi berikut:</p>
+          
+          <div class="flex flex-col md:flex-row items-center justify-around gap-6 py-4">
+            <div class="text-center space-y-2">
+              <div class="w-16 h-16 bg-amber-500/20 border-2 border-amber-400 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
+                🍊
+              </div>
+              <p class="text-xs font-bold text-amber-300">MASUKAN (Input x)</p>
+              <p class="text-[11px] text-indigo-300">Buah Jeruk</p>
+            </div>
+
+            <div class="text-2xl text-pink-400 font-bold animate-pulse">&rarr;</div>
+
+            <div class="bg-indigo-900/80 p-5 rounded-2xl border-2 border-pink-500/60 text-center space-y-2 shadow-xl">
+              <svg class="w-20 h-20 mx-auto" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 12H44L40 44H24L20 12Z" fill="#818CF8" stroke="#EEF2FF" stroke-width="2"/>
+                <path d="M16 44H48V52C48 54.2091 46.2091 56 44 56H20C17.7909 56 16 54.2091 16 52V44Z" fill="#4338CA" stroke="#EEF2FF" stroke-width="2"/>
+                <circle cx="32" cy="48" r="3" fill="#F59E0B"/>
+                <path d="M28 8H36V12H28V8Z" fill="#EC4899"/>
+              </svg>
+              <p class="font-game text-sm text-pink-300">FUNGSI f</p>
+              <p class="text-[10px] text-indigo-200">Mesin Pemroses</p>
+            </div>
+
+            <div class="text-2xl text-pink-400 font-bold animate-pulse">&rarr;</div>
+
+            <div class="text-center space-y-2">
+              <div class="w-16 h-16 bg-emerald-500/20 border-2 border-emerald-400 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
+                🥤
+              </div>
+              <p class="text-xs font-bold text-emerald-300">KELUARAN (Output f(x))</p>
+              <p class="text-[11px] text-indigo-300">Jus Jeruk</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BAGIAN 2: JEBAKAN MEMBACA RELASI -->
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="border-b border-indigo-800 pb-3">
+          <h3 class="font-game text-2xl text-amber-300">2. Menghindari Jebakan Membaca Arah Relasi Antar Himpunan</h3>
+          <p class="text-xs text-indigo-300 mt-1">Topik ini paling sering mengecoh siswa dalam menuliskan pasangan berurutan atau menentukan nama relasinya jika tidak teliti.</p>
+        </div>
+
+        <div class="space-y-6 text-xs md:text-sm">
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-pink-500 space-y-4 shadow-lg">
+            <span class="bg-pink-600 text-white font-game text-[10px] px-3 py-1 rounded-full uppercase font-bold">Kasus 1: Relasi "Kuadrat Dari"</span>
+            <p class="text-indigo-100 font-medium">
+              Diberikan himpunan K = {3, 4, 5} dan L = {9, 16, 25}. Tentukan pasangan berurutan untuk relasi <strong>"kuadrat dari" dari L ke K</strong>!
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-3.5 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-amber-300 font-bold block">Langkah 1: Patuhi Arah Jalurnya</span>
+                <p class="text-indigo-200 font-sans">Karena perintahnya <strong>dari L ke K</strong>, maka posisi format penulisan titik wajib <strong>(L, K)</strong>. Jangan dibalik!</p>
+              </div>
+              <div class="bg-indigo-900/60 p-3.5 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-emerald-300 font-bold block">Langkah 2: Uji Pasangannya</span>
+                <p class="text-indigo-200 font-sans">Ambil angka dari L duluan:<br/>&bull; 9 kuadrat dari 3 &rarr; (9, 3)<br/>&bull; 16 kuadrat dari 4 &rarr; (16, 4)<br/>&bull; 25 kuadrat dari 5 &rarr; (25, 5)</p>
+              </div>
+            </div>
+            <p class="text-emerald-300 font-bold bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 text-center">
+              &rarr; Kesimpulan Jawaban: {(9, 3), (16, 4), (25, 5)}
+            </p>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-blue-500 space-y-4 shadow-lg">
+            <span class="bg-blue-600 text-white font-game text-[10px] px-3 py-1 rounded-full uppercase font-bold">Kasus 2: Relasi "Setengah Dari"</span>
+            <p class="text-indigo-100 font-medium">
+              Diketahui himpunan P = {2, 3, 4} dan Q = {4, 6, 8, 10}. Tentukan pasangan berurutan untuk relasi <strong>"setengah dari" dari P ke Q</strong>!
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-3.5 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-amber-300 font-bold block">Langkah 1: Patuhi Arah Jalurnya</span>
+                <p class="text-indigo-200 font-sans">Karena perintahnya <strong>dari P ke Q</strong>, maka posisi format penulisan titik wajib <strong>(P, Q)</strong>.</p>
+              </div>
+              <div class="bg-indigo-900/60 p-3.5 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-emerald-300 font-bold block">Langkah 2: Uji Pasangannya</span>
+                <p class="text-indigo-200 font-sans">Ambil angka dari P duluan:<br/>&bull; 2 adalah setengah dari 4 &rarr; (2, 4)<br/>&bull; 3 adalah setengah dari 6 &rarr; (3, 6)<br/>&bull; 4 adalah setengah dari 8 &rarr; (4, 8)</p>
+              </div>
+            </div>
+            <p class="text-emerald-300 font-bold bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 text-center">
+              &rarr; Kesimpulan Jawaban: {(2, 4), (3, 6), (4, 8)}
+            </p>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-emerald-500 space-y-4 shadow-lg">
+            <span class="bg-emerald-600 text-white font-game text-[10px] px-3 py-1 rounded-full uppercase font-bold">Kasus 3: Menemukan Nama Relasi ("2 Kali Dari")</span>
+            <p class="text-indigo-100 font-medium">
+              Diketahui himpunan P = {1, 2, 3} dan Q = {2, 4, 6} dengan himpunan pasangan berurutan <code class="text-amber-300 font-mono">{(1, 2), (2, 4), (3, 6)}</code> dari P ke Q. Tentukan nama relasinya!
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-3.5 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-amber-300 font-bold block">Analisis Elemen (P ke Q)</span>
+                <p class="text-indigo-200 font-sans">Bandingkan elemen pertama (x) ke elemen kedua (y):<br/>1 ke 2, 2 ke 4, 3 ke 6.</p>
+              </div>
+              <div class="bg-indigo-900/60 p-3.5 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-emerald-300 font-bold block">Uji Hubungan</span>
+                <p class="text-indigo-200 font-sans">Nilai y adalah dua kali lipat dari nilai x. Karena arahnya dari P ke Q, maka angka pertama dikalikan 2 menghasilkan angka kedua.</p>
+              </div>
+            </div>
+            <p class="text-emerald-300 font-bold bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 text-center">
+              &rarr; Kesimpulan Jawaban Nama Relasi: <strong class="text-amber-300">"2 kali dari"</strong>
+            </p>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-cyan-500 space-y-4 shadow-lg">
+            <span class="bg-cyan-600 text-indigo-950 font-game text-[10px] px-3 py-1 rounded-full uppercase font-bold">Kasus 4: Menemukan Nama Relasi ("Akar Dari")</span>
+            <p class="text-indigo-100 font-medium">
+              Diketahui himpunan M = {4, 9, 16} dan N = {2, 3, 4} dengan himpunan pasangan berurutan <code class="text-amber-300 font-mono">{(4, 2), (9, 3), (16, 4)}</code> dari M ke N. Tentukan nama relasinya!
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-3.5 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-amber-300 font-bold block">Analisis Elemen (M ke N)</span>
+                <p class="text-indigo-200 font-sans">Bandingkan elemen pertama (x) ke elemen kedua (y):<br/>4 ke 2, 9 ke 3, 16 ke 4.</p>
+              </div>
+              <div class="bg-indigo-900/60 p-3.5 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-emerald-300 font-bold block">Uji Hubungan</span>
+                <p class="text-indigo-200 font-sans">Nilai y adalah akar kuadrat dari nilai x. Karena arahnya dari M ke N, maka relasinya dinamakan akar dari.</p>
+              </div>
+            </div>
+            <p class="text-emerald-300 font-bold bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 text-center">
+              &rarr; Kesimpulan Jawaban Nama Relasi: <strong class="text-amber-300">"akar dari"</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BAGIAN 3: DOMAIN, KODOMAIN, RANGE -->
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="border-b border-indigo-800 pb-3">
+          <h3 class="font-game text-2xl text-amber-300">3. Domain, Kodomain, dan Range</h3>
+          <p class="text-xs text-indigo-300 mt-1">Perhatikan diagram panah fungsi f: A &rarr; B berikut:</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-indigo-950 p-6 rounded-2xl border border-indigo-800">
+          <div class="lg:col-span-5 flex items-center justify-center gap-6 bg-indigo-900/50 p-6 rounded-2xl border border-indigo-700">
+            <div class="bg-pink-500/20 border-2 border-pink-400 rounded-full px-5 py-6 text-center space-y-3 text-pink-200 font-bold text-sm shadow-md">
+              <p class="text-amber-300 border-b border-pink-400 pb-1 font-game">A</p>
+              <p>a</p><p>b</p><p>c</p><p>d</p>
+            </div>
+            <div class="flex flex-col items-center">
+              <span class="font-game text-amber-300 text-sm mb-1">f</span>
+              <div class="text-emerald-400 font-bold text-2xl">&rarr;</div>
+            </div>
+            <div class="bg-blue-500/20 border-2 border-blue-400 rounded-full px-5 py-5 text-center space-y-2 text-blue-200 font-bold text-sm shadow-md">
+              <p class="text-amber-300 border-b border-blue-400 pb-1 font-game">B</p>
+              <p class="text-emerald-300">1</p><p class="opacity-40">2</p><p class="text-emerald-300">3</p><p class="text-emerald-300">4</p>
+            </div>
+          </div>
+          <div class="lg:col-span-7 space-y-4 text-xs md:text-sm">
+            <div class="bg-emerald-950/70 border-2 border-emerald-500 p-4 rounded-2xl space-y-1 shadow">
+              <span class="bg-emerald-500 text-indigo-950 font-game text-xs px-3 py-0.5 rounded-lg font-bold">Range = {1, 3, 4}</span>
+              <p class="text-emerald-100 font-medium pt-1"><strong>Range (Daerah Hasil):</strong> Semua anggota kodomain B yang terkena panah.</p>
+            </div>
+            <div class="bg-amber-950/70 border-2 border-amber-500 p-4 rounded-2xl space-y-1 shadow">
+              <span class="bg-amber-500 text-indigo-950 font-game text-xs px-3 py-0.5 rounded-lg font-bold">Kodomain = {1, 2, 3, 4}</span>
+              <p class="text-amber-100 font-medium pt-1"><strong>Kodomain (Daerah Kawan):</strong> Seluruh anggota pada himpunan B.</p>
+            </div>
+            <div class="bg-blue-950/70 border-2 border-blue-500 p-4 rounded-2xl space-y-1 shadow">
+              <span class="bg-blue-600 text-white font-game text-xs px-3 py-0.5 rounded-lg font-bold">Domain = {a, b, c, d}</span>
+              <p class="text-blue-100 font-medium pt-1"><strong>Domain (Daerah Asal):</strong> Seluruh anggota pada himpunan A.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BAGIAN 4: MEMBACA DIAGRAM -->
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="border-b border-indigo-800 pb-3">
+          <h3 class="font-game text-2xl text-amber-300">4. Membaca Diagram & Menemukan Rumus Fungsi f(x)</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs md:text-sm">
+          <div class="bg-indigo-950 p-5 rounded-2xl border border-indigo-800 space-y-3">
+            <h4 class="font-game text-base text-pink-400">A. Membaca dari Diagram Panah</h4>
+            <div class="bg-indigo-900/60 p-4 rounded-xl border border-indigo-700 flex items-center justify-around">
+              <div class="space-y-1 text-center font-bold text-xs text-pink-200">
+                <p class="text-[10px] text-amber-300">Domain x</p>
+                <div class="bg-pink-950 px-3 py-1 rounded">1</div>
+                <div class="bg-pink-950 px-3 py-1 rounded">2</div>
+                <div class="bg-pink-950 px-3 py-1 rounded">3</div>
+              </div>
+              <div class="text-emerald-400 text-xs space-y-1 font-mono">
+                <div>&rarr; dikali 2 plus 1</div>
+                <div>&rarr; dikali 2 plus 1</div>
+                <div>&rarr; dikali 2 plus 1</div>
+              </div>
+              <div class="space-y-1 text-center font-bold text-xs text-blue-200">
+                <p class="text-[10px] text-amber-300">Hasil f(x)</p>
+                <div class="bg-blue-950 px-3 py-1 rounded">3</div>
+                <div class="bg-blue-950 px-3 py-1 rounded">5</div>
+                <div class="bg-blue-950 px-3 py-1 rounded">7</div>
+              </div>
+            </div>
+            <p class="text-emerald-300 font-bold text-center pt-1">&rarr; Kesimpulan Rumus: f(x) = 2x + 1</p>
+          </div>
+
+          <div class="bg-indigo-950 p-5 rounded-2xl border border-indigo-800 space-y-3">
+            <h4 class="font-game text-base text-cyan-300">B. Membaca dari Diagram Kartesius</h4>
+            <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 flex flex-col items-center justify-center">
+              <svg width="220" height="130" viewBox="0 0 220 130" class="overflow-visible">
+                <line x1="30" y1="100" x2="200" y2="100" stroke="#F59E0B" stroke-width="2.5" />
+                <line x1="30" y1="15" x2="30" y2="110" stroke="#F59E0B" stroke-width="2.5" />
+                <text x="205" y="104" fill="#F59E0B" font-size="12" font-weight="bold">x</text>
+                <text x="22" y="15" fill="#F59E0B" font-size="12" font-weight="bold">y</text>
+                <line x1="70" y1="100" x2="70" y2="70" stroke="#EC4899" stroke-dasharray="3,3" stroke-width="1.5"/>
+                <line x1="30" y1="70" x2="70" y2="70" stroke="#EC4899" stroke-dasharray="3,3" stroke-width="1.5"/>
+                <circle cx="70" cy="70" r="4" fill="#EC4899"/>
+                <line x1="110" y1="100" x2="110" y2="40" stroke="#EC4899" stroke-dasharray="3,3" stroke-width="1.5"/>
+                <line x1="30" y1="40" x2="110" y2="40" stroke="#EC4899" stroke-dasharray="3,3" stroke-width="1.5"/>
+                <circle cx="110" cy="40" r="4" fill="#EC4899"/>
+                <line x1="150" y1="100" x2="150" y2="10" stroke="#EC4899" stroke-dasharray="3,3" stroke-width="1.5"/>
+                <line x1="30" y1="10" x2="150" y2="10" stroke="#EC4899" stroke-dasharray="3,3" stroke-width="1.5"/>
+                <circle cx="150" cy="10" r="4" fill="#EC4899"/>
+                <text x="66" y="113" fill="#E2E8F0" font-size="10">1</text>
+                <text x="106" y="113" fill="#E2E8F0" font-size="10">2</text>
+                <text x="146" y="113" fill="#E2E8F0" font-size="10">3</text>
+                <text x="15" y="74" fill="#E2E8F0" font-size="10">2</text>
+                <text x="15" y="44" fill="#E2E8F0" font-size="10">4</text>
+                <text x="15" y="14" fill="#E2E8F0" font-size="10">6</text>
+              </svg>
+            </div>
+            <p class="text-emerald-300 font-bold text-center text-xs">&rarr; Titik (1,2), (2,4), (3,6) &rarr; f(x) = 2x</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BAGIAN 5: MENGUBAH SUATU FUNGSI KE BERBAGAI BENTUK -->
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="border-b border-indigo-800 pb-3">
+          <h3 class="font-game text-2xl text-amber-300">5. Mengubah Fungsi Menjadi Berbagai Bentuk Penyajian</h3>
+          <p class="text-xs text-indigo-300 mt-1">Mari kita ubah sebuah fungsi sederhana <strong>f(x) = x + 1</strong> (dengan Domain A = {1, 2, 3}) ke dalam 3 bentuk:</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-blue-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 bg-blue-500 text-indigo-950 rounded-xl flex items-center justify-center font-game font-bold">1</span>
+                <h4 class="font-game text-lg text-blue-300">Diagram Panah</h4>
+              </div>
+              <p class="text-xs text-indigo-200">Menghubungkan elemen Domain ke Kodomain menggunakan panah.</p>
+              <div class="bg-indigo-900/60 p-4 rounded-xl border border-indigo-700 text-center space-y-2">
+                <p class="text-[11px] text-amber-300 font-bold">Aturan: f(x) = x + 1</p>
+                <div class="flex justify-around items-center text-xs font-bold text-indigo-100">
+                  <div class="space-y-1 bg-pink-900/40 p-2 rounded-lg border border-pink-500 text-left">
+                    <p class="text-[10px] text-pink-300">Domain &rarr; Hasil</p>
+                    <p>1 &rarr; 2</p><p>2 &rarr; 3</p><p>3 &rarr; 4</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="text-[11px] text-indigo-400 italic text-center">Visualisasi pemetaan langsung.</p>
+          </div>
+
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-emerald-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 bg-emerald-500 text-indigo-950 rounded-xl flex items-center justify-center font-game font-bold">2</span>
+                <h4 class="font-game text-lg text-emerald-300">Pasangan Berurutan</h4>
+              </div>
+              <p class="text-xs text-indigo-200">Menyatakan relasi dalam bentuk himpunan titik (x, y).</p>
+              <div class="bg-indigo-900/60 p-4 rounded-xl border border-indigo-700 text-center space-y-2">
+                <p class="text-[11px] text-amber-300 font-bold">Format: {(x, f(x))}</p>
+                <div class="bg-emerald-950/60 p-3 rounded-lg border border-emerald-500 font-mono text-xs text-emerald-200">
+                  {(1, 2), (2, 3), (3, 4)}
+                </div>
+              </div>
+            </div>
+            <p class="text-[11px] text-indigo-400 italic text-center">Elemen pertama x, elemen kedua y.</p>
+          </div>
+
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-pink-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 bg-pink-500 text-white rounded-xl flex items-center justify-center font-game font-bold">3</span>
+                <h4 class="font-game text-lg text-pink-300">Diagram Kartesius</h4>
+              </div>
+              <p class="text-xs text-indigo-200">Menyajikan titik koordinat f(x) = x + 1 pada bidang sumbu:</p>
+              <div class="bg-indigo-900/60 p-2 rounded-xl border border-indigo-700 flex flex-col items-center justify-center">
+                <svg width="190" height="110" viewBox="0 0 190 110" class="overflow-visible">
+                  <line x1="25" y1="90" x2="175" y2="90" stroke="#F59E0B" stroke-width="2" />
+                  <line x1="25" y1="15" x2="25" y2="100" stroke="#F59E0B" stroke-width="2" />
+                  <line x1="55" y1="90" x2="55" y2="65" stroke="#38BDF8" stroke-dasharray="2,2"/>
+                  <line x1="25" y1="65" x2="55" y2="65" stroke="#38BDF8" stroke-dasharray="2,2"/>
+                  <circle cx="55" cy="65" r="3.5" fill="#38BDF8"/>
+                  <line x1="95" y1="90" x2="95" y2="45" stroke="#38BDF8" stroke-dasharray="2,2"/>
+                  <line x1="25" y1="45" x2="95" y2="45" stroke="#38BDF8" stroke-dasharray="2,2"/>
+                  <circle cx="95" cy="45" r="3.5" fill="#38BDF8"/>
+                  <line x1="135" y1="90" x2="135" y2="25" stroke="#38BDF8" stroke-dasharray="2,2"/>
+                  <line x1="25" y1="25" x2="135" y2="25" stroke="#38BDF8" stroke-dasharray="2,2"/>
+                  <circle cx="135" cy="25" r="3.5" fill="#38BDF8"/>
+                  <text x="50" y="102" fill="#E2E8F0" font-size="9">1</text>
+                  <text x="90" y="102" fill="#E2E8F0" font-size="9">2</text>
+                  <text x="130" y="102" fill="#E2E8F0" font-size="9">3</text>
+                  <text x="12" y="68" fill="#E2E8F0" font-size="9">2</text>
+                  <text x="12" y="48" fill="#E2E8F0" font-size="9">3</text>
+                  <text x="12" y="28" fill="#E2E8F0" font-size="9">4</text>
+                </svg>
+              </div>
+            </div>
+            <p class="text-[11px] text-cyan-300 italic text-center font-mono">Titik: (1,2), (2,3), (3,4)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PERTEMUAN 2: 2. Syarat Fungsi -->
+    <section id="tab-pertemuan2" class="hidden space-y-6">
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-4 shadow-xl">
+        <div class="flex items-center gap-3">
+          <span class="bg-emerald-500 text-indigo-950 font-game text-xs px-3.5 py-1.5 rounded-full uppercase font-bold shadow">
+            Pertemuan 2
+          </span>
+          <span class="text-xs text-pink-300 font-bold uppercase tracking-wider">Materi Penelitian KTI Kelas 8</span>
+        </div>
+        <h2 class="font-game text-3xl md:text-4xl text-amber-300">
+          Syarat Mutlak Fungsi: Analisis "Jomblo vs Poligami"
+        </h2>
+        <p class="text-xs md:text-sm text-indigo-200 leading-relaxed">
+          Sesi ini melatih nalar kritis siswa menggunakan visualisasi diagram dan berbagai variasi soal analisis untuk memahami kapan suatu relasi sah disebut sebagai Fungsi (Pemetaan) atau Bukan Fungsi.
+        </p>
+      </div>
+
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="flex items-center gap-2 border-b border-indigo-800 pb-3">
+          <span class="text-2xl">⚖️</span>
+          <h3 class="font-game text-2xl text-amber-300">1. Fungsi dan Bukan Fungsi (Analisis Diagram Panah)</h3>
+        </div>
+        <p class="text-xs text-indigo-300">Perhatikan hubungan dari <strong>Himpunan X (Domain)</strong> ke <strong>Himpunan Y (Kodomain)</strong> di bawah ini:</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div class="bg-indigo-950 p-5 rounded-3xl border-2 border-emerald-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="text-center">
+                <span class="bg-emerald-600 text-white font-game text-[10px] px-3 py-1 rounded-full uppercase font-bold tracking-wider">Diagram 1</span>
+                <h4 class="font-game text-lg text-emerald-300 mt-2">Merupakan FUNGSI ✅</h4>
+              </div>
+              <div class="bg-indigo-900/70 p-4 rounded-2xl border border-indigo-700 text-center space-y-2">
+                <p class="text-[11px] font-bold text-amber-300">Himp. X &rarr; Himp. Y</p>
+                <div class="space-y-1.5 font-mono text-xs text-indigo-100 bg-indigo-950 p-3 rounded-xl border border-indigo-800">
+                  <p>A &rarr; 1</p><p>B &rarr; 2</p><p>C &rarr; 3</p>
+                </div>
+              </div>
+            </div>
+            <p class="text-[11px] text-indigo-200 leading-relaxed bg-emerald-950/40 p-3 rounded-2xl border border-emerald-500/30">
+              <strong>Penjelasan:</strong> Semua anggota di Himpunan X punya <strong>tepat satu pasangan</strong> di Himpunan Y. Tidak ada yang jomblo dan tidak ada yang bercabang.
+            </p>
+          </div>
+
+          <div class="bg-indigo-950 p-5 rounded-3xl border-2 border-amber-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="text-center">
+                <span class="bg-amber-600 text-indigo-950 font-game text-[10px] px-3 py-1 rounded-full uppercase font-bold tracking-wider">Diagram 2</span>
+                <h4 class="font-game text-lg text-amber-300 mt-2">Bukan Fungsi (Jomblo) ❌</h4>
+              </div>
+              <div class="bg-indigo-900/70 p-4 rounded-2xl border border-indigo-700 text-center space-y-2">
+                <p class="text-[11px] font-bold text-amber-300">Himp. X &rarr; Himp. Y</p>
+                <div class="space-y-1.5 font-mono text-xs text-indigo-100 bg-indigo-950 p-3 rounded-xl border border-indigo-800">
+                  <p>A &rarr; 1</p><p>B &rarr; 2</p><p class="text-amber-400 font-bold">C (Jomblo / Tak Berpasangan)</p>
+                </div>
+              </div>
+            </div>
+            <p class="text-[11px] text-indigo-200 leading-relaxed bg-amber-950/40 p-3 rounded-2xl border border-amber-500/30">
+              <strong>Penjelasan:</strong> Bukan fungsi karena elemen C pada Himpunan X <strong>tidak punya pasangan sama sekali</strong> di Himpunan Y.
+            </p>
+          </div>
+
+          <div class="bg-indigo-950 p-5 rounded-3xl border-2 border-pink-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="text-center">
+                <span class="bg-pink-600 text-white font-game text-[10px] px-3 py-1 rounded-full uppercase font-bold tracking-wider">Diagram 3</span>
+                <h4 class="font-game text-lg text-pink-300 mt-2">Bukan Fungsi (Cabang) ❌</h4>
+              </div>
+              <div class="bg-indigo-900/70 p-4 rounded-2xl border border-indigo-700 text-center space-y-2">
+                <p class="text-[11px] font-bold text-amber-300">Himp. X &rarr; Himp. Y</p>
+                <div class="space-y-1.5 font-mono text-xs text-indigo-100 bg-indigo-950 p-3 rounded-xl border border-indigo-800">
+                  <p>A &rarr; 1</p><p class="text-pink-300 font-bold">B &rarr; 2 & 3 (Cabang / Poligami!)</p><p>C &rarr; 3</p>
+                </div>
+              </div>
+            </div>
+            <p class="text-[11px] text-indigo-200 leading-relaxed bg-pink-950/40 p-3 rounded-2xl border border-pink-500/30">
+              <strong>Penjelasan:</strong> Bukan fungsi karena elemen B pada Himpunan X memilih <strong>dua pasangan sekaligus</strong> di Himpunan Y.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="border-b border-indigo-800 pb-3">
+          <h3 class="font-game text-2xl text-amber-300">2. Variasi Soal Kontekstual & Analisis</h3>
+          <p class="text-xs text-indigo-300 mt-1">Studi kasus nyata yang disajikan dalam format soal terstruktur:</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-pink-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="bg-pink-600 text-white px-3 py-1 rounded-xl text-[10px] font-bold uppercase font-game">Studi Kasus 1</span>
+              <p class="text-indigo-100 text-xs md:text-sm font-medium leading-relaxed">
+                Dalam sebuah kelompok belajar terdiri dari 4 siswa: <strong>Andi, Budi, Cici, dan Dini</strong>. Mereka memilih 3 jenis es krim favorit: <strong>Cokelat, Vanila, dan Stroberi</strong>.
+              </p>
+              <ul class="list-disc list-inside text-xs text-indigo-200 space-y-1 pl-1">
+                <li>Andi dan Cici menyukai Cokelat.</li>
+                <li>Budi menyukai Vanila.</li>
+                <li>Dini menyukai Stroberi dan Cokelat.</li>
+              </ul>
+            </div>
+            <div class="bg-indigo-900/70 p-3.5 rounded-xl border border-pink-500/40 text-xs text-indigo-200 space-y-1">
+              <p class="text-pink-300 font-bold">&bull; Analisis & Kesimpulan:</p>
+              <p>Dini memilih 2 jenis es krim (bercabang / poligami). Karena domain tidak boleh bercabang, maka relasi ini <strong class="text-amber-300">Bukan Fungsi</strong>.</p>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-blue-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="bg-blue-600 text-white px-3 py-1 rounded-xl text-[10px] font-bold uppercase font-game">Studi Kasus 2</span>
+              <p class="text-indigo-100 text-xs md:text-sm font-medium leading-relaxed">
+                Dalam pemilihan ekstrakurikuler di SMP, terdapat 4 siswa: <strong>Rian, Sinta, Tono, dan Vina</strong>. Mereka memilih 3 jenis ekstrakurikuler: <strong>Basket, Pramuka, dan Paskibra</strong>.
+              </p>
+              <ul class="list-disc list-inside text-xs text-indigo-200 space-y-1 pl-1">
+                <li>Rian dan Tono memilih Pramuka.</li>
+                <li>Sinta memilih Basket.</li>
+                <li>Vina memilih Basket dan Paskibra.</li>
+              </ul>
+            </div>
+            <div class="bg-indigo-900/70 p-3.5 rounded-xl border border-blue-500/40 text-xs text-indigo-200 space-y-1">
+              <p class="text-blue-300 font-bold">&bull; Analisis & Kesimpulan:</p>
+              <p>Vina memilih 2 ekstrakurikuler (bercabang / poligami). Karena domain memiliki lebih dari satu pasangan, maka relasi ini <strong class="text-amber-300">Bukan Fungsi</strong>.</p>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-emerald-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="bg-emerald-600 text-white px-3 py-1 rounded-xl text-[10px] font-bold uppercase font-game">Studi Kasus 3</span>
+              <p class="text-indigo-100 text-xs md:text-sm font-medium leading-relaxed">
+                Manakah di antara himpunan pasangan berurutan berikut yang merupakan sebuah <strong>fungsi</strong>?<br/>
+                &bull; P = {(1, 2), (2, 3), (3, 4)}<br/>
+                &bull; Q = {(1, 2), (1, 3), (2, 4)}
+              </p>
+            </div>
+            <div class="bg-indigo-900/70 p-3.5 rounded-xl border border-emerald-500/40 text-xs text-indigo-200 space-y-1">
+              <p class="text-emerald-300 font-bold">&bull; Analisis & Kesimpulan:</p>
+              <p>Himpunan P memiliki nilai x unik semua (tidak ada yang kembar/cabang), sedangkan Q memiliki angka 1 yang bercabang ke 2 dan 3. Maka yang merupakan fungsi adalah <strong class="text-amber-300">Himpunan P</strong>.</p>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-amber-500 space-y-4 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <span class="bg-amber-600 text-indigo-950 px-3 py-1 rounded-xl text-[10px] font-extrabold uppercase font-game">Studi Kasus 4</span>
+              <p class="text-indigo-100 text-xs md:text-sm font-medium leading-relaxed">
+                Manakah di antara himpunan pasangan berurutan berikut yang merupakan sebuah <strong>fungsi</strong>?<br/>
+                &bull; R = {(a, 1), (b, 1), (c, 2)}<br/>
+                &bull; S = {(a, 1), (b, 2), (b, 3)}
+              </p>
+            </div>
+            <div class="bg-indigo-900/70 p-3.5 rounded-xl border border-amber-500/40 text-xs text-indigo-200 space-y-1">
+              <p class="text-amber-300 font-bold">&bull; Analisis & Kesimpulan:</p>
+              <p>Himpunan R memiliki elemen domain (a, b, c) yang masing-masing punya tepat satu pasangan, sedangkan S memiliki huruf 'b' yang bercabang ke 2 dan 3. Maka yang merupakan fungsi adalah <strong class="text-amber-300">Himpunan R</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. PERTEMUAN 3: 3. Subtitusi Dasar -->
+    <section id="tab-pertemuan3" class="hidden space-y-6">
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-4 shadow-xl">
+        <div class="flex items-center gap-3">
+          <span class="bg-blue-500 text-indigo-950 font-game text-xs px-3.5 py-1.5 rounded-full uppercase font-bold shadow">
+            Pertemuan 3
+          </span>
+          <span class="text-xs text-pink-300 font-bold uppercase tracking-wider">Materi Penelitian KTI Kelas 8</span>
+        </div>
+        <h2 class="font-game text-3xl md:text-4xl text-amber-300">
+          Perhitungan Nilai Fungsi (Substitusi Dasar)
+        </h2>
+        <p class="text-xs md:text-sm text-indigo-200 leading-relaxed">
+          Sesi ini dirancang untuk melatih ketelitian tinggi. Meskipun konsep substitusinya hanya memasukkan angka, bagian ini sangat mengecoh jika tidak menguasai aturan perkalian tanda negatif dan prioritas hitung.
+        </p>
+      </div>
+
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 rounded-3xl space-y-6">
+        <div class="flex items-center gap-2 border-b border-indigo-800 pb-3">
+          <span class="text-2xl">⚠️</span>
+          <h3 class="font-game text-2xl text-pink-400">1. Panduan Wajib: Aturan Tanda & Prioritas Operasi</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-amber-400 space-y-3 shadow-lg">
+            <h4 class="font-game text-base text-amber-300 flex items-center gap-2">
+              <span>➕ ✖️ ➖</span> Hukum Perkalian Tanda & Contohnya
+            </h4>
+            <div class="space-y-2 text-xs font-mono">
+              <div class="bg-indigo-900/80 p-2.5 rounded-xl border border-indigo-700 flex justify-between items-center text-emerald-300">
+                <span>(+) × (+) = (+)</span>
+                <span class="text-[10px] bg-emerald-950 px-2.5 py-1 rounded text-white font-sans font-bold">Contoh: 3 × 4 = 12</span>
+              </div>
+              <div class="bg-indigo-900/80 p-2.5 rounded-xl border border-indigo-700 flex justify-between items-center text-emerald-300 font-bold">
+                <span>(-) × (-) = (+)</span>
+                <span class="text-[10px] bg-emerald-950 px-2.5 py-1 rounded text-white font-sans font-bold">Contoh: (-3) × (-4) = 12</span>
+              </div>
+              <div class="bg-indigo-900/80 p-2.5 rounded-xl border border-indigo-700 flex justify-between items-center text-pink-300">
+                <span>(+) × (-) = (-)</span>
+                <span class="text-[10px] bg-pink-950 px-2.5 py-1 rounded text-white font-sans font-bold">Contoh: 3 × (-4) = -12</span>
+              </div>
+              <div class="bg-indigo-900/80 p-2.5 rounded-xl border border-indigo-700 flex justify-between items-center text-pink-300">
+                <span>(-) × (+) = (-)</span>
+                <span class="text-[10px] bg-pink-950 px-2.5 py-1 rounded text-white font-sans font-bold">Contoh: (-3) × 4 = -12</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-cyan-400 space-y-3 shadow-lg flex flex-col justify-between">
+            <div class="space-y-3">
+              <h4 class="font-game text-base text-cyan-300 flex items-center gap-2">
+                <span>⚡</span> Prioritas Pengerjaan
+              </h4>
+              <div class="space-y-2 text-xs text-indigo-200">
+                <div class="bg-indigo-900/80 p-3 rounded-xl border border-indigo-700 space-y-1">
+                  <p class="font-bold text-amber-300">Langkah 1: Selesaikan Perkalian Dulu</p>
+                  <p class="text-[11px]">Dalam bentuk f(x) = 5 - 2x, jika x = 4, hitung dulu <strong>(2 x 4)</strong> sebelum dikurangkan.</p>
+                </div>
+                <div class="bg-indigo-900/80 p-3 rounded-xl border border-indigo-700 space-y-1">
+                  <p class="font-bold text-emerald-300">Langkah 2: Operasi Penjumlahan / Pengurangan</p>
+                  <p class="text-[11px]">Baru lakukan pengurangan atau penjumlahan di akhir.</p>
+                </div>
+              </div>
+            </div>
+            <p class="text-[10px] text-pink-300 italic text-center">*Jangan pernah mengurangkan angka di depan sebelum perkalian diselesaikan!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="border-b border-indigo-800 pb-3">
+          <h3 class="font-game text-2xl text-amber-300">2. Bedah Tuntas Soal Latihan (Soal 1 - 4)</h3>
+          <p class="text-xs text-indigo-300 mt-1">Analisis langkah demi langkah agar terhindar dari jebakan tanda:</p>
+        </div>
+
+        <div class="space-y-6 text-xs md:text-sm">
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-blue-500 space-y-4 shadow-lg">
+            <div class="flex items-center justify-between">
+              <span class="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs font-bold font-game">Soal 1</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">f(x) = 5 - 2x</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-sm">Suatu fungsi dirumuskan dengan f(x) = 5 - 2x. Nilai dari f(4) adalah...</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-[10px] text-pink-300 font-bold block">TAHAP 1: Substitusi</span>
+                <p class="text-indigo-200">Ganti x dengan angka 4.</p>
+                <p class="text-amber-200 font-bold">f(4) = 5 - 2(4)</p>
+              </div>
+              <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-[10px] text-cyan-300 font-bold block">TAHAP 2: Perkalian</span>
+                <p class="text-indigo-200">Hitung 2 x 4 dulu.</p>
+                <p class="text-amber-200 font-bold">= 5 - 8</p>
+              </div>
+              <div class="bg-emerald-950/80 p-3 rounded-xl border border-emerald-500 space-y-1">
+                <span class="text-[10px] text-emerald-300 font-bold block">TAHAP 3: Hasil Akhir</span>
+                <p class="text-indigo-200">Kurangi hasilnya.</p>
+                <p class="text-emerald-300 font-bold text-sm">= -3</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-pink-500 space-y-4 shadow-xl">
+            <div class="flex items-center justify-between">
+              <span class="bg-pink-600 text-white px-3 py-1 rounded-xl text-xs font-bold font-game">Soal 2 (Paling Tricky!)</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">g(x) = -3x + 8</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-sm">Diketahui rumus fungsi g(x) = -3x + 8. Nilai dari g(-4) adalah...</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-[10px] text-pink-300 font-bold block">TAHAP 1: Substitusi</span>
+                <p class="text-indigo-200">Ganti x dengan (-4).</p>
+                <p class="text-amber-200 font-bold">g(-4) = -3(-4) + 8</p>
+              </div>
+              <div class="bg-pink-950/80 p-3 rounded-xl border border-pink-500 space-y-1">
+                <span class="text-[10px] text-pink-300 font-bold block">TAHAP 2: Hukum Tanda</span>
+                <p class="text-indigo-200">(-) × (-) jadi Positif (+).</p>
+                <p class="text-pink-300 font-bold">= +12 + 8</p>
+              </div>
+              <div class="bg-emerald-950/80 p-3 rounded-xl border border-emerald-500 space-y-1">
+                <span class="text-[10px] text-emerald-300 font-bold block">TAHAP 3: Hasil Akhir</span>
+                <p class="text-indigo-200">Jumlahkan.</p>
+                <p class="text-emerald-300 font-bold text-sm">= 20</p>
+              </div>
+            </div>
+            <div class="bg-pink-950/40 p-3 rounded-xl border border-pink-500/40 text-[11px] text-pink-200 flex items-center gap-2">
+              <span class="text-base">💡</span>
+              <p><strong>Catatan Penting:</strong> Ingat hukum perkalian tanda bahwa <strong>Negatif dikali Negatif menghasilkan Positif</strong>. Jangan sampai terkecoh menulis -12!</p>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-emerald-500 space-y-4 shadow-xl">
+            <div class="flex items-center justify-between">
+              <span class="bg-emerald-600 text-white px-3 py-1 rounded-xl text-xs font-bold font-game">Soal 3</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">h(x) = 4x - 9</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-sm">Diketahui fungsi h(x) = 4x - 9. Jika nilai h(a) = 11, maka nilai a adalah...</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-[10px] text-pink-300 font-bold block">TAHAP 1</span>
+                <p class="text-indigo-200">Masukkan nilai a.</p>
+                <p class="text-amber-200 font-bold">4a - 9 = 11</p>
+              </div>
+              <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-[10px] text-cyan-300 font-bold block">TAHAP 2</span>
+                <p class="text-indigo-200">Pindah ruas (-9).</p>
+                <p class="text-amber-200 font-bold">4a = 11 + 9</p>
+              </div>
+              <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-[10px] text-amber-300 font-bold block">TAHAP 3</span>
+                <p class="text-indigo-200">Jumlahkan.</p>
+                <p class="text-amber-200 font-bold">4a = 20</p>
+              </div>
+              <div class="bg-emerald-950/80 p-3 rounded-xl border border-emerald-500 space-y-1">
+                <span class="text-[10px] text-emerald-300 font-bold block">TAHAP 4</span>
+                <p class="text-indigo-200">Bagi dengan 4.</p>
+                <p class="text-emerald-300 font-bold text-sm">a = 5</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-amber-500 space-y-4 shadow-xl">
+            <div class="flex items-center justify-between">
+              <span class="bg-amber-600 text-indigo-950 px-3 py-1 rounded-xl text-xs font-extrabold font-game">Soal 4 (Operasi Gabungan)</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">f(x) = 3x + 1</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-sm">Suatu fungsi dirumuskan dengan f(x) = 3x + 1. Tentukan nilai dari operasi f(2) + f(5)!</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-[10px] text-pink-300 font-bold block">TAHAP 1: Cari f(2)</span>
+                <p class="text-indigo-200">Substitusi x = 2.</p>
+                <p class="text-amber-200 font-bold">f(2) = 3(2) + 1 = 7</p>
+              </div>
+              <div class="bg-indigo-900/60 p-3 rounded-xl border border-indigo-700 space-y-1">
+                <span class="text-[10px] text-cyan-300 font-bold block">TAHAP 2: Cari f(5)</span>
+                <p class="text-indigo-200">Substitusi x = 5.</p>
+                <p class="text-amber-200 font-bold">f(5) = 3(5) + 1 = 16</p>
+              </div>
+              <div class="bg-emerald-950/80 p-3 rounded-xl border border-emerald-500 space-y-1">
+                <span class="text-[10px] text-emerald-300 font-bold block">TAHAP 3: Jumlahkan</span>
+                <p class="text-indigo-200">f(2) + f(5).</p>
+                <p class="text-emerald-300 font-bold text-sm">7 + 16 = 23</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. PERTEMUAN 4: 4. Subtitusi Advance -->
+    <section id="tab-pertemuan4" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-900 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-4 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 text-9xl opacity-10 select-none">🚀</div>
+        <div class="flex items-center gap-3">
+          <span class="bg-purple-500 text-white font-game text-xs px-3.5 py-1.5 rounded-full uppercase font-bold shadow">
+            Pertemuan 4 (Advance Level)
+          </span>
+          <span class="text-xs text-pink-300 font-bold uppercase tracking-wider">KTI Research Module</span>
+        </div>
+        <h2 class="font-game text-3xl md:text-4xl text-amber-300">
+          Pembalian Variabel & Analisis Rumus Fungsi Linear
+        </h2>
+        <p class="text-xs md:text-sm text-indigo-200 leading-relaxed max-w-3xl">
+          Zona tingkat lanjut! Di sini kita melatih nalar aljabar tingkat menengah: mencari nilai masukan x jika keluarannya sudah diketahui, membongkar rahasia koefisien a dan b, serta trik kilat manipulasi fungsi kompleks.
+        </p>
+      </div>
+
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 rounded-3xl space-y-6 shadow-xl">
+        <div class="flex items-center gap-2 border-b border-indigo-800 pb-3">
+          <span class="text-2xl">💡</span>
+          <h3 class="font-game text-2xl text-amber-300">1. Peta Konsep Utama</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs md:text-sm">
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-cyan-400 space-y-3 interactive-card shadow-lg">
+            <div class="flex items-center gap-2 text-cyan-300 font-game text-base">
+              <span>🎯</span>
+              <h4>Pembalian Variabel (Mencari x)</h4>
+            </div>
+            <p class="text-indigo-200 leading-relaxed">
+              Biasanya kita mencari hasil fungsi, tapi di sini dibalik: hasil akhirnya sudah diketahui, tugas kita adalah mencari angka asal (variabel di dalam kurung). Tinggal balikkan operasi hitungnya!
+            </p>
+            <div class="bg-indigo-900/80 p-3 rounded-xl border border-indigo-700 font-mono text-xs text-emerald-300 space-y-1">
+              <p>Contoh: p(x) = 3x - 11 dan p(b) = 13</p>
+              <p>&rarr; 3b - 11 = 13</p>
+              <p>&rarr; 3b = 13 + 11 = 24 &rArr; b = 8</p>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-pink-500 space-y-4 interactive-card shadow-lg">
+            <div class="flex items-center gap-2 text-pink-300 font-game text-base">
+              <span>⚙️</span>
+              <h4>Menentukan a dan b (Sistem Persamaan)</h4>
+            </div>
+            <p class="text-indigo-200 leading-relaxed">
+              Untuk fungsi linear f(x) = ax + b dengan dua nilai f(x) diketahui, buat 2 persamaan aljabar lalu gunakan metode eliminasi/substitusi untuk menemukan koefisien secara presisi.
+            </p>
+            <div class="bg-indigo-900/80 p-3.5 rounded-xl border border-indigo-700 font-mono text-xs text-amber-300 space-y-1">
+              <p>f(x) = ax + b</p>
+              <p>f(2) = 2a + b = 5</p>
+              <p>f(5) = 5a + b = 14 &rArr; <span class="text-emerald-400 font-bold">Eliminasi b!</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="border-b border-indigo-800 pb-3">
+          <h3 class="font-game text-2xl text-amber-300">2. Bedah Tuntas 3 Paket Soal Advance</h3>
+          <p class="text-xs text-indigo-300 mt-1">Pembahasan super detail, interaktif, dan mudah dipahami langkah demi langkah:</p>
+        </div>
+
+        <div class="space-y-6 text-xs md:text-sm">
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-blue-500 space-y-4 shadow-lg interactive-card">
+            <div class="flex items-center justify-between">
+              <span class="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs font-bold font-game">Soal 1 Advance</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">Pembalian Variabel Pecahan</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-xs md:text-sm">
+              Diketahui suatu fungsi dirumuskan dengan f(x) = (2x - 2) / 4. Jika nilai f(k) = 3, tentukan nilai dari k!
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-4 rounded-xl border border-indigo-700 space-y-1.5">
+                <span class="text-[10px] text-pink-300 font-bold block">TAHAP 1: Substitusi k</span>
+                <p class="text-indigo-200">Ganti x dengan k:</p>
+                <p class="text-amber-200 font-bold">f(k) = (2k - 2) / 4 = 3</p>
+              </div>
+              <div class="bg-indigo-900/60 p-4 rounded-xl border border-indigo-700 space-y-1.5">
+                <span class="text-[10px] text-cyan-300 font-bold block">TAHAP 2: Kali Silang</span>
+                <p class="text-indigo-200">Pindahkan penyebut 4:</p>
+                <p class="text-amber-200 font-bold">2k - 2 = 3 * 4 = 12</p>
+              </div>
+              <div class="bg-emerald-950/80 p-4 rounded-xl border border-emerald-500 space-y-1.5">
+                <span class="text-[10px] text-emerald-300 font-bold block">TAHAP 3: Hasil Akhir k</span>
+                <p class="text-indigo-200">2k = 12 + 2 = 14:</p>
+                <p class="text-emerald-300 font-bold text-sm">k = 14 / 2 = 7</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-pink-500 space-y-4 shadow-xl interactive-card">
+            <div class="flex items-center justify-between">
+              <span class="bg-pink-600 text-white px-3 py-1 rounded-xl text-xs font-bold font-game">Soal 2 Advance (Super Detail)</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">Membongkar Koefisien a, b & Rumus Fungsi</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-xs md:text-sm">
+              Suatu fungsi linear dirumuskan sebagai f(x) = ax + b. Jika diketahui nilai f(2) = 5 dan f(5) = 14, tentukan:<br/>
+              a. Nilai konstanta a dan b<br/>
+              b. Rumus fungsi f(x)
+            </p>
+            <div class="bg-indigo-900/70 p-4 rounded-xl border border-indigo-700 space-y-4 font-mono text-xs">
+              <div class="space-y-1.5 text-indigo-200 bg-indigo-950/80 p-3.5 rounded-xl border border-indigo-800">
+                <span class="text-amber-300 font-bold block text-sm">&bull; Langkah 1: Buat 2 Persamaan Aljabar</span>
+                <p>Masukkan angka x = 2 ke rumus f(x) = ax + b &rArr; f(2) = a(2) + b = 5 &rArr; <strong class="text-cyan-300">2a + b = 5 (Persamaan 1)</strong></p>
+                <p>Masukkan angka x = 5 ke rumus f(x) = ax + b &rArr; f(5) = a(5) + b = 14 &rArr; <strong class="text-cyan-300">5a + b = 14 (Persamaan 2)</strong></p>
+              </div>
+              <div class="space-y-1.5 text-indigo-200 bg-indigo-950/80 p-3.5 rounded-xl border border-indigo-800">
+                <span class="text-pink-300 font-bold block text-sm">&bull; Langkah 2: Eliminasi b untuk Mencari a</span>
+                <p>Karena huruf b di Persamaan 1 dan 2 sama persis (+b), kita kurangkan Persamaan 2 dengan Persamaan 1 agar b lenyap:</p>
+                <p class="text-amber-200 pl-4">
+                  (5a + b) - (2a + b) = 14 - 5<br/>
+                  3a = 9<br/>
+                  a = 9 / 3 = <strong class="text-emerald-300">3</strong>
+                </p>
+              </div>
+              <div class="space-y-1.5 text-indigo-200 bg-indigo-950/80 p-3.5 rounded-xl border border-indigo-800">
+                <span class="text-cyan-300 font-bold block text-sm">&bull; Langkah 3: Substitusi a untuk Mencari b</span>
+                <p>Masukkan nilai a = 3 ke Persamaan 1 (2a + b = 5):</p>
+                <p class="text-amber-200 pl-4">
+                  2(3) + b = 5<br/>
+                  6 + b = 5<br/>
+                  b = 5 - 6 = <strong class="text-emerald-300">-1</strong>
+                </p>
+              </div>
+              <div class="bg-emerald-950/90 p-4 rounded-xl border-2 border-emerald-500 space-y-2 text-emerald-300 font-bold">
+                <p class="text-sm border-b border-emerald-700 pb-1">✨ Rangkuman Jawaban:</p>
+                <p>a. Nilai konstanta adalah <span class="text-white">a = 3</span> dan <span class="text-white">b = -1</span>.</p>
+                <p>b. Rumus fungsi lengkapnya adalah <span class="text-amber-300 text-sm">f(x) = 3x - 1</span>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-emerald-500 space-y-4 shadow-xl interactive-card">
+            <div class="flex items-center justify-between">
+              <span class="bg-emerald-600 text-white px-3 py-1 rounded-xl text-xs font-bold font-game">Soal 3 Advance (Trik Kilat)</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">Langsung Cari f(5) Tanpa Rumus f(x)</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-xs md:text-sm">
+              Diketahui bentuk fungsi di dalam kurung tidak biasa, yaitu f(x - 1) = 2x + 3. Tentukan nilai dari f(5)!
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+              <div class="bg-indigo-900/60 p-4 rounded-xl border border-indigo-700 space-y-1.5">
+                <span class="text-[10px] text-pink-300 font-bold block">TAHAP 1: Samakan Isi Kurung</span>
+                <p class="text-indigo-200">Kita cari f(5), maka samakan:</p>
+                <p class="text-amber-200 font-bold">x - 1 = 5</p>
+              </div>
+              <div class="bg-indigo-900/60 p-4 rounded-xl border border-indigo-700 space-y-1.5">
+                <span class="text-[10px] text-cyan-300 font-bold block">TAHAP 2: Temukan x</span>
+                <p class="text-indigo-200">Pindah ruas (-1 jadi +1):</p>
+                <p class="text-amber-200 font-bold">x = 5 + 1 = 6</p>
+              </div>
+              <div class="bg-emerald-950/80 p-4 rounded-xl border border-emerald-500 space-y-1.5">
+                <span class="text-[10px] text-emerald-300 font-bold block">TAHAP 3: Hitung f(5)</span>
+                <p class="text-indigo-200">Masukkan x = 6 ke 2x + 3:</p>
+                <p class="text-emerald-300 font-bold text-sm">2(6) + 3 = 12 + 3 = 15</p>
+              </div>
+            </div>
+            <div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/40 text-[11px] text-emerald-200 flex items-center gap-2">
+              <span class="text-base">🚀</span>
+              <p><strong>Tips Cepat:</strong> Cara kilat ini sangat menghemat waktu ujian karena kita langsung mendapat hasil akhir tanpa perlu repot mencari rumus f(x) terlebih dahulu!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. PERTEMUAN 5: 5. Pemodelan Matematika -->
+    <section id="tab-pertemuan5" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-900 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-4 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 text-9xl opacity-10 select-none">🎯</div>
+        <div class="flex items-center gap-3">
+          <span class="bg-emerald-500 text-indigo-950 font-game text-xs px-3.5 py-1.5 rounded-full uppercase font-bold shadow">
+            Pertemuan 5 (Final Level)
+          </span>
+          <span class="text-xs text-pink-300 font-bold uppercase tracking-wider">KTI Research Module</span>
+        </div>
+        <h2 class="font-game text-3xl md:text-4xl text-amber-300">
+          Pemodelan Matematika & Aplikasi Fungsi Linear (Soal Cerita)
+        </h2>
+        <p class="text-xs md:text-sm text-indigo-200 leading-relaxed max-w-3xl">
+          Babak puncak penjelajahan algebra! Mari belajar cara menerjemahkan cerita kehidupan nyata (seperti tarif sewa kendaraan dan pola tabungan) ke dalam rumus fungsi matematika yang keren dan mudah diselesaikan.
+        </p>
+      </div>
+
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="flex items-center gap-2 border-b border-indigo-800 pb-3">
+          <span class="text-2xl">📖</span>
+          <h3 class="font-game text-2xl text-amber-300">1. Panduan Praktis: Cara Membaca & Menerjemahkan Soal Cerita</h3>
+        </div>
+        <p class="text-xs md:text-sm text-indigo-200">
+          Banyak siswa merasa pusing dengan soal cerita karena kalimatnya yang panjang. Padahal, rahasianya terletak pada kemampuan memetakan kalimat ke dalam bentuk umum fungsi linear: <strong class="text-amber-300 font-mono">f(x) = ax + b</strong>. Ikuti trik membaca berikut agar tidak terkecoh:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs md:text-sm">
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-cyan-400 space-y-3 interactive-card shadow-lg">
+            <div class="flex items-center gap-2 text-cyan-300 font-game text-base">
+              <span>🛵</span>
+              <h4>Tipe 1: Biaya Tetap vs Biaya Variabel (Sewa / Taksi)</h4>
+            </div>
+            <div class="space-y-2 text-indigo-200">
+              <p><strong>Ciri Kalimat:</strong> Ada tarif awal yang dibayar sekali di muka, lalu ada biaya tambahan yang terus bertambah seiring berjalannya waktu, jarak, atau berat.</p>
+              <div class="bg-indigo-900/80 p-3 rounded-xl border border-indigo-700 font-mono text-xs text-emerald-300 space-y-1">
+                <p>&bull; Biaya awal / tetap = Konstanta (b)</p>
+                <p>&bull; Biaya per satuan (jam/km) = Koefisien (a)</p>
+                <p>&bull; Contoh: f(t) = 5.000t + 20.000</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-5 rounded-2xl border-2 border-pink-500 space-y-3 interactive-card shadow-lg">
+            <div class="flex items-center gap-2 text-pink-300 font-game text-base">
+              <span>💰</span>
+              <h4>Tipe 2: Pola Pertambahan Tetap (Tabungan / Barisan)</h4>
+            </div>
+            <div class="space-y-2 text-indigo-200">
+              <p><strong>Ciri Kalimat:</strong> Nilai bertambah atau berkurang secara teratur setiap bulan atau setiap hari (membentuk pola barisan aritmatika).</p>
+              <div class="bg-indigo-900/80 p-3 rounded-xl border border-indigo-700 font-mono text-xs text-amber-300 space-y-1">
+                <p>&bull; Nilai awal (bulan ke-1) = Suku pertama (a)</p>
+                <p>&bull; Besar penambahan tetap = Beda (b)</p>
+                <p>&bull; Rumus cepat: f(n) = (Beda * n) + (Awal - Beda)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 md:p-8 rounded-3xl space-y-6 shadow-xl">
+        <div class="border-b border-indigo-800 pb-3">
+          <h3 class="font-game text-2xl text-amber-300">2. Bedah Tuntas Latihan Soal Cerita (Isian Singkat)</h3>
+          <p class="text-xs text-indigo-300 mt-1">Mari asah ketelitian dan nalar analitis melalui dua tantangan soal cerita berikut:</p>
+        </div>
+        <div class="space-y-6 text-xs md:text-sm">
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-blue-500 space-y-4 shadow-lg interactive-card">
+            <div class="flex items-center justify-between">
+              <span class="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs font-bold font-game">Soal 1 (Isian Singkat)</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">Aplikasi Tarif Sewa Kendaraan</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-xs md:text-sm leading-relaxed">
+              Tempat penyewaan sepeda motor menetapkan biaya sewa awal sebesar Rp20.000,00 dan biaya tambahan sebesar Rp5.000,00 per jam. Jika t menyatakan waktu sewa dalam jam dan f(t) menyatakan total biaya sewa dalam rupiah, tentukan bentuk rumus fungsinya dan hitung total biaya yang harus dibayar jika menyewa selama 8 jam!
+            </p>
+            <div class="bg-indigo-900/70 p-4 rounded-xl border border-indigo-700 space-y-3 font-mono text-xs">
+              <span class="text-amber-300 font-bold block text-sm">&bull; Pembahasan Detail & Menyenangkan:</span>
+              <div class="space-y-1.5 text-indigo-200">
+                <p>1. <strong>Membaca Unsur Soal:</strong> Biaya awal 20.000 adalah angka tetap (tidak terikat waktu), sedangkan 5.000 dikalikan dengan setiap jam (t). Jadi, bentuk fungsi lengkapnya adalah <strong class="text-cyan-300">f(t) = 5.000t + 20.000</strong>.</p>
+                <p>2. <strong>Menghitung Biaya untuk 8 Jam (t = 8):</strong><br/>
+                   &bull; Masukkan angka 8 ke variabel t:<br/>
+                   &bull; f(8) = 5.000(8) + 20.000<br/>
+                   &bull; f(8) = 40.000 + 20.000 = <strong class="text-emerald-300">Rp60.000,00</strong></p>
+              </div>
+              <div class="bg-emerald-950/80 p-3 rounded-xl border border-emerald-500 text-emerald-300 font-bold text-center">
+                ✨ Jawaban Isian Singkat:<br/>
+                <span class="text-white text-sm">Rumus: f(t) = 5.000t + 20.000 | Total Biaya 8 Jam: Rp60.000,00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950 p-6 rounded-2xl border-2 border-pink-500 space-y-4 shadow-lg interactive-card">
+            <div class="flex items-center justify-between">
+              <span class="bg-pink-600 text-white px-3 py-1 rounded-xl text-xs font-bold font-game">Soal 2 (Isian Singkat)</span>
+              <span class="text-amber-300 font-mono text-xs font-bold bg-indigo-900 px-3 py-1 rounded-lg">Aplikasi Pola Tabungan Bulanan</span>
+            </div>
+            <p class="text-indigo-100 font-medium text-xs md:text-sm leading-relaxed">
+              Setiap bulan, Siti menyisihkan sebagian uang sakunya untuk ditabung. Pada bulan pertama ia menabung sebesar Rp5.000,00, pada bulan kedua sebesar Rp8.000,00, bulan ketiga sebesar Rp11.000,00, dan begitu seterusnya dengan penambahan jumlah yang tetap setiap bulannya. Berapakah besar uang yang ditabung Siti khusus pada bulan ke-12?
+            </p>
+            <div class="bg-indigo-900/70 p-4 rounded-xl border border-indigo-700 space-y-3 font-mono text-xs">
+              <span class="text-pink-300 font-bold block text-sm">&bull; Pembahasan Detail & Menyenangkan:</span>
+              <div class="space-y-1.5 text-indigo-200">
+                <p>1. <strong>Menganalisis Pola Kenaikan:</strong><br/>
+                   &bull; Bulan ke-1 (a) = 5.000<br/>
+                   &bull; Bulan ke-2 = 8.000 (bertambah 3.000)<br/>
+                   &bull; Bulan ke-3 = 11.000 (bertambah 3.000)<br/>
+                   &bull; Jadi, besar beda (b) atau penambahan tetap setiap bulan adalah <strong class="text-cyan-300">3.000</strong>.</p>
+                <p>2. <strong>Membuat Rumus Fungsi Tabungan f(n):</strong><br/>
+                   &bull; Gunakan rumus cepat barisan aritmatika: f(n) = (Beda * n) + (Awal - Beda)<br/>
+                   &bull; f(n) = 3.000n + (5.000 - 3.000)<br/>
+                   &bull; <strong class="text-cyan-300">f(n) = 3.000n + 2.000</strong></p>
+                <p>3. <strong>Menghitung Tabungan Bulan ke-12 (n = 12):</strong><br/>
+                   &bull; f(12) = 3.000(12) + 2.000<br/>
+                   &bull; f(12) = 36.000 + 2.000 = <strong class="text-emerald-300">Rp38.000,00</strong></p>
+              </div>
+              <div class="bg-emerald-950/80 p-3 rounded-xl border border-emerald-500 text-emerald-300 font-bold text-center">
+                ✨ Jawaban Isian Singkat:<br/>
+                <span class="text-white text-sm">Tabungan Bulan ke-12 = Rp38.000,00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. LAB SIMULASI -->
+    <section id="tab-simulasi" class="hidden space-y-6">
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 rounded-3xl space-y-6">
+        <div>
+          <h2 class="font-game text-3xl text-amber-300">🧪 Laboratorium Simulasi Interaktif</h2>
+          <p class="text-xs text-indigo-200">Praktikkan konsep abstrak fungsi secara visual dengan lab simulasi di bawah ini!</p>
+        </div>
+
+        <div class="bg-indigo-950 p-6 rounded-2xl border border-indigo-800 space-y-4">
+          <h3 class="font-game text-xl text-pink-400">Lab: Mesin Fungsi (Input - Proses - Output)</h3>
+          <p class="text-xs text-indigo-200">Tujuan: Memahami fungsi sebagai mesin pemroses angka input (x) menjadi output (y).</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-indigo-900/60 p-5 rounded-xl border border-indigo-700">
+            <div class="space-y-4">
+              <div>
+                <label class="text-xs font-bold text-amber-300 block mb-1">Pilih Rumus Mesin:</label>
+                <select id="machine-formula" class="w-full px-3 py-2 bg-indigo-950 border-2 border-amber-400 rounded-xl text-xs font-bold text-amber-300 focus:outline-none">
+                  <option value="2x+2">f(x) = 2x + 2</option>
+                  <option value="3x-1">f(x) = 3x - 1</option>
+                  <option value="5x">f(x) = 5x</option>
+                  <option value="x2+1">f(x) = x² + 1</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-xs font-bold text-amber-300 block mb-1">Masukkan Nilai x (Input):</label>
+                <input type="number" id="machine-x" value="4" class="w-full px-3 py-2 bg-indigo-950 border-2 border-amber-400 rounded-xl text-center font-bold text-amber-300 text-base focus:outline-none"/>
+              </div>
+              <button onclick="runFunctionMachine()" class="w-full bg-gradient-to-r from-pink-500 to-amber-400 text-indigo-950 font-game py-3 rounded-xl hover:scale-105 transition shadow-lg font-bold text-sm">
+                ⚡ PROSES MESIN
+              </button>
+            </div>
+
+            <div class="space-y-3 flex flex-col justify-between">
+              <div class="bg-indigo-950 p-4 rounded-xl border border-indigo-800 text-xs font-mono text-center node-pulse" id="machine-output-box">
+                Hasil Proses: f(4) = <span class="text-amber-300 font-bold text-base">10</span>
+              </div>
+              <div class="bg-indigo-950 p-3 rounded-xl border border-indigo-800">
+                <p class="text-[10px] font-bold text-indigo-300 mb-1 uppercase">Tabel Riwayat Output (Pasangan x, y):</p>
+                <div id="machine-history" class="text-[11px] font-mono text-emerald-300 space-y-1 max-h-28 overflow-y-auto">
+                  <div>(4) &rarr; [10]</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. BANK SOAL INTERAKTIF (50 Soal: 10 Soal per Level) -->
+    <section id="tab-soal" class="hidden space-y-6">
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 rounded-3xl space-y-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 class="font-game text-3xl text-amber-300">🏆 Bank Soal Interaktif (50 Soal)</h2>
+            <p class="text-xs text-indigo-200">Terdiri dari 5 Level (masing-masing 10 soal) sesuai materi pertemuan. Soal dirancang humanis untuk siswa kelas 8 standar.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="filterLevel('all')" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-indigo-800 text-white hover:bg-indigo-700 border border-indigo-600">Semua</button>
+            <button onclick="filterLevel(1)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-500">Lvl 1 (P1)</button>
+            <button onclick="filterLevel(2)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-500">Lvl 2 (P2)</button>
+            <button onclick="filterLevel(3)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-amber-600 text-white hover:bg-amber-500">Lvl 3 (P3)</button>
+            <button onclick="filterLevel(4)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-purple-600 text-white hover:bg-purple-500">Lvl 4 (P4)</button>
+            <button onclick="filterLevel(5)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-pink-600 text-white hover:bg-pink-500">Lvl 5 (P5)</button>
+          </div>
+        </div>
+
+        <div id="quiz-container" class="space-y-6">
+          <!-- Rendered dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. QUEST MAP (5 Worlds dengan Ikon Berbeda) -->
+    <section id="tab-checkpoint" class="hidden space-y-6">
+      <div class="bg-indigo-900/90 border-2 border-indigo-700 p-6 rounded-3xl space-y-6">
+        <div>
+          <h2 class="font-game text-3xl text-amber-300">🗺️ Peta Petualangan Quest MATH-CONNECT (5 Worlds)</h2>
+          <p class="text-xs text-indigo-200">Tekan tombol unlock di bawah setiap level pada Bank Soal untuk membuka dunia di Quest Map dan mengklaim XP!</p>
+        </div>
+
+        <div class="relative py-10 flex flex-col items-center gap-6 bg-indigo-950/60 rounded-2xl border border-indigo-800 p-6">
+          
+          <div id="world-card-1" class="flex items-center gap-4 bg-emerald-900/40 border-2 border-emerald-400 p-5 rounded-2xl w-full max-w-lg shadow-lg">
+            <div class="w-12 h-12 bg-emerald-500 text-indigo-950 rounded-2xl flex items-center justify-center font-game text-2xl shadow-md border-2 border-white">🎒</div>
+            <div class="flex-grow">
+              <span class="text-[10px] bg-emerald-400 text-indigo-950 font-bold px-2 py-0.5 rounded-full uppercase">World 1</span>
+              <h4 class="font-game text-base text-emerald-300">Konsep Dasar Relasi & Fungsi</h4>
+              <p class="text-xs text-indigo-200" id="world-status-1">Status: Terbuka (+100 XP)</p>
+            </div>
+          </div>
+
+          <div id="world-card-2" class="flex items-center gap-4 bg-indigo-950/80 border-2 border-indigo-800 p-5 rounded-2xl w-full max-w-lg opacity-70">
+            <div id="world-icon-2" class="w-12 h-12 bg-indigo-800 text-indigo-400 rounded-2xl flex items-center justify-center font-game text-2xl">⚖️</div>
+            <div class="flex-grow">
+              <span class="text-[10px] bg-indigo-700 text-indigo-200 font-bold px-2 py-0.5 rounded-full uppercase">World 2</span>
+              <h4 class="font-game text-base text-blue-300">Syarat Mutlak Fungsi (Jomblo vs Cabang)</h4>
+              <p class="text-xs text-indigo-400" id="world-status-2">Status: Terkunci (Selesaikan Level 2)</p>
+            </div>
+          </div>
+
+          <div id="world-card-3" class="flex items-center gap-4 bg-indigo-950/80 border-2 border-indigo-800 p-5 rounded-2xl w-full max-w-lg opacity-70">
+            <div id="world-icon-3" class="w-12 h-12 bg-indigo-800 text-indigo-400 rounded-2xl flex items-center justify-center font-game text-2xl">🔢</div>
+            <div class="flex-grow">
+              <span class="text-[10px] bg-indigo-700 text-indigo-200 font-bold px-2 py-0.5 rounded-full uppercase">World 3</span>
+              <h4 class="font-game text-base text-amber-300">Subtitusi Dasar & Perhitungan Nilai Fungsi</h4>
+              <p class="text-xs text-indigo-400" id="world-status-3">Status: Terkunci (Selesaikan Level 3)</p>
+            </div>
+          </div>
+
+          <div id="world-card-4" class="flex items-center gap-4 bg-indigo-950/80 border-2 border-indigo-800 p-5 rounded-2xl w-full max-w-lg opacity-70">
+            <div id="world-icon-4" class="w-12 h-12 bg-indigo-800 text-indigo-400 rounded-2xl flex items-center justify-center font-game text-2xl">⚙️</div>
+            <div class="flex-grow">
+              <span class="text-[10px] bg-indigo-700 text-indigo-200 font-bold px-2 py-0.5 rounded-full uppercase">World 4</span>
+              <h4 class="font-game text-base text-purple-300">Subtitusi Advance & Analisis Rumus</h4>
+              <p class="text-xs text-indigo-400" id="world-status-4">Status: Terkunci (Selesaikan Level 4)</p>
+            </div>
+          </div>
+
+          <div id="world-card-5" class="flex items-center gap-4 bg-indigo-950/80 border-2 border-indigo-800 p-5 rounded-2xl w-full max-w-lg opacity-70">
+            <div id="world-icon-5" class="w-12 h-12 bg-indigo-800 text-indigo-400 rounded-2xl flex items-center justify-center font-game text-2xl">🚀</div>
+            <div class="flex-grow">
+              <span class="text-[10px] bg-indigo-700 text-indigo-200 font-bold px-2 py-0.5 rounded-full uppercase">World 5</span>
+              <h4 class="font-game text-base text-pink-300">Pemodelan Matematika & Soal Cerita</h4>
+              <p class="text-xs text-indigo-400" id="world-status-5">Status: Terkunci (Selesaikan Level 5)</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script>
+    let currentXP = 350;
+    let unlockedWorlds = [1];
+
+    // TAB SWITCHER
+    function switchTab(tabId) {
+      const tabs = ['home', 'materi_dasar', 'pertemuan1', 'pertemuan2', 'pertemuan3', 'pertemuan4', 'pertemuan5', 'simulasi', 'soal', 'checkpoint'];
+      tabs.forEach(id => {
+        const el = document.getElementById(`tab-${id}`);
+        if(el) el.classList.add('hidden');
+        const navEl = document.getElementById(`nav-${id}`);
+        if(navEl) navEl.classList.remove('tab-active');
+      });
+      const targetTab = document.getElementById(`tab-${tabId}`);
+      if(targetTab) targetTab.classList.remove('hidden');
+      const targetNav = document.getElementById(`nav-${tabId}`);
+      if(targetNav) targetNav.classList.add('tab-active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // LAB SIMULATOR: MESIN FUNGSI
+    function runFunctionMachine() {
+      const formula = document.getElementById('machine-formula').value;
+      const x = parseFloat(document.getElementById('machine-x').value) || 0;
+      let y = 0;
+      let steps = "";
+
+      if(formula === '2x+2') {
+        y = 2 * x + 2;
+        steps = `f(${x}) = 2(${x}) + 2 = ${2*x} + 2 = ${y}`;
+      } else if(formula === '3x-1') {
+        y = 3 * x - 1;
+        steps = `f(${x}) = 3(${x}) - 1 = ${3*x} - 1 = ${y}`;
+      } else if(formula === '5x') {
+        y = 5 * x;
+        steps = `f(${x}) = 5(${x}) = ${y}`;
+      } else if(formula === 'x2+1') {
+        y = (x * x) + 1;
+        steps = `f(${x}) = (${x})² + 1 = ${x*x} + 1 = ${y}`;
+      }
+
+      document.getElementById('machine-output-box').innerHTML = `Hasil Proses: <span class="text-amber-300 font-bold">${steps}</span>`;
+      
+      const historyDiv = document.getElementById('machine-history');
+      const newEntry = document.createElement('div');
+      newEntry.innerHTML = `(${x}) &rarr; [${y}]`;
+      historyDiv.prepend(newEntry);
+    }
+
+    // 50 SOAL BANK DATA (10 Soal per Level)
+    const quizData = [
+      // LEVEL 1 (Konsep Dasar)
+      { id: 1, level: 1, q: "Daerah asal pada suatu relasi atau fungsi dinamakan...", options: ["Kodomain", "Range", "Domain", "Bayangan"], ans: 2, exp: "Daerah asal disebut Domain." },
+      { id: 2, level: 1, q: "Daerah kawan pada suatu fungsi dinamakan...", options: ["Domain", "Kodomain", "Range", "Variabel"], ans: 1, exp: "Daerah kawan disebut Kodomain." },
+      { id: 3, level: 1, q: "Himpunan semua anggota kodomain yang menerima pasangan dari domain disebut...", options: ["Domain", "Kodomain", "Range", "Konstanta"], ans: 2, exp: "Range adalah daerah hasil." },
+      { id: 4, level: 1, q: "Diketahui himpunan K = {1, 2, 3} dan L = {2, 4, 6}. Relasi dari K ke L adalah...", options: ["dua kali dari", "setengah dari", "kuadrat dari", "akar dari"], ans: 1, exp: "1 setengah dari 2, 2 setengah dari 4, 3 setengah dari 6." },
+      { id: 5, level: 1, q: "Himpunan pasangan berurutan dari K = {1, 2, 3} ke L = {2, 4, 6} dengan relasi 'setengah dari' adalah...", options: ["{(1,2), (2,4), (3,6)}", "{(2,1), (4,2), (6,3)}", "{(1,4), (2,6), (3,2)}", "{(3,6), (2,4), (1,2)}"], ans: 0, exp: "Pasangan terurut berurutan dari K ke L: (1,2), (2,4), (3,6)." },
+      { id: 6, level: 1, q: "Diketahui himpunan P = {4, 9, 16} dan Q = {2, 3, 4}. Relasi dari P ke Q adalah...", options: ["kuadrat dari", "akar dari", "dua kali dari", "setengah dari"], ans: 1, exp: "4 akar dari 2, 9 akar dari 3, 16 akar dari 4." },
+      { id: 7, level: 1, q: "Jika fungsi f: x -> 2x + 1 dengan domain {1, 2, 3}, maka range dari fungsi tersebut adalah...", options: ["{2, 4, 6}", "{3, 5, 7}", "{1, 3, 5}", "{4, 6, 8}"], ans: 1, exp: "f(1)=3, f(2)=5, f(3)=7 -> {3, 5, 7}." },
+      { id: 8, level: 1, q: "Suatu relasi khusus yang memasangkan setiap anggota domain dengan tepat satu anggota kodomain disebut...", options: ["Fungsi (Pemetaan)", "Korespondensi satu-satu bebas", "Relasi bebas", "Bukan fungsi"], ans: 0, exp: "Definisi fungsi adalah relasi khusus yang memasangkan setiap domain tepat ke satu kodomain." },
+      { id: 9, level: 1, q: "Diagram yang menyajikan relasi menggunakan kurva tertutup dan panah penghubung disebut...", options: ["Diagram Kartesius", "Diagram Panah", "Tabel Nilai", "Grafik Batang"], ans: 1, exp: "Itu adalah definisi diagram panah." },
+      { id: 10, level: 1, q: "Manakah yang bukan merupakan cara menyatakan suatu relasi?", options: ["Diagram panah", "Himpunan pasangan berurutan", "Rumus fungsi aljabar", "Tabel kebenaran logika informatika"], ans: 3, exp: "Tabel kebenaran logika bukan cara standar menyatakan relasi himpunan matematika." },
+
+      // LEVEL 2 (Syarat Fungsi)
+      { id: 11, level: 2, q: "Manakah syarat utama suatu relasi disebut sebagai Fungsi (Pemetaan)?", options: ["Domain boleh bercabang", "Setiap elemen Domain wajib memiliki tepat 1 pasangan", "Kodomain harus habis berpasangan", "Range harus sama dengan kodomain"], ans: 1, exp: "Syarat fungsi: Setiap domain harus memiliki tepat satu pasangan." },
+      { id: 12, level: 2, q: "Di antara himpunan pasangan berurutan berikut, manakah yang merupakan fungsi?", options: ["{(1,2), (1,3), (2,4)}", "{(1,2), (2,3), (3,4)}", "{(2,1), (2,2), (3,4)}", "{(3,1), (3,2), (3,3)}"], ans: 1, exp: "Himpunan kedua memiliki elemen domain unik 1, 2, 3 tanpa cabang." },
+      { id: 13, level: 2, q: "Dalam diagram panah fungsi, jika ada anggota domain yang tidak mempunyai pasangan disebut...", options: ["Jomblo (tidak dipetakan)", "Cabang", "Kodomain", "Range"], ans: 0, exp: "Domain yang tidak dipetakan melanggar syarat fungsi." },
+      { id: 14, level: 2, q: "Dalam diagram panah fungsi, jika ada anggota domain yang memiliki dua panah sekaligus disebut...", options: ["Jomblo", "Cabang / Poligami", "Domain tunggal", "Kodomain kosong"], ans: 1, exp: "Domain bercabang membuat relasi tersebut bukan fungsi." },
+      { id: 15, level: 2, q: "Manakah yang merupakan fungsi dari himpunan P = {a, b} ke Q = {1}?", options: ["{(a,1), (b,1)}", "{(a,1)}", "{(a,1), (b,1), (a,2)}", "{}"], ans: 0, exp: "Setiap elemen P (a dan b) memiliki tepat satu pasangan ke 1." },
+      { id: 16, level: 2, q: "Uji garis vertikal pada grafik koordinat kartesius digunakan untuk menentukan apakah suatu grafik merupakan...", options: ["Fungsi", "Persamaan kuadrat murni", "Garis lurus biasa", "Lingkaran"], ans: 0, exp: "Garis vertikal yang memotong grafik di lebih dari satu titik membuktikan bukan fungsi." },
+      { id: 17, level: 2, q: "Relasi dari himpunan anak ke ibu kandungnya dipastikan merupakan fungsi karena...", options: ["Setiap anak memiliki tepat satu ibu kandung", "Ibu memiliki banyak anak", "Anak tidak punya ibu", "Ibu tidak punya anak"], ans: 0, exp: "Setiap anak punya tepat satu ibu kandung, memenuhi syarat fungsi." },
+      { id: 18, level: 2, q: "Jika suatu relasi dari himpunan A ke B memiliki elemen domain yang bercabang, maka relasi tersebut...", options: ["Merupakan fungsi", "Bukan fungsi", "Pasti korespondensi", "Bernilai nol"], ans: 1, exp: "Domain bercabang berarti bukan fungsi." },
+      { id: 19, level: 2, q: "Manakah dari himpunan pasangan berurutan berikut yang BUKAN fungsi?", options: ["{(1,a), (2,b), (3,c)}", "{(1,a), (2,a), (3,a)}", "{(1,a), (1,b), (2,c)}", "{(2,c), (3,d)}"], ans: 2, exp: "Elemen 1 memiliki pasangan ganda (a dan b), jadi bukan fungsi." },
+      { id: 20, level: 2, q: "Apa nama lain dari fungsi dalam istilah matematika?", options: ["Pemetaan", "Korespondensi silang", "Invers", "Konstanta"], ans: 0, exp: "Fungsi sering disebut juga sebagai pemetaan." },
+
+      // LEVEL 3 (Subtitusi Dasar)
+      { id: 21, level: 3, q: "Suatu fungsi dirumuskan dengan f(x) = 3x - 2. Nilai dari f(4) adalah...", options: ["10", "12", "8", "14"], ans: 0, exp: "f(4) = 3(4) - 2 = 12 - 2 = 10." },
+      { id: 22, level: 3, q: "Diketahui rumus fungsi g(x) = -2x + 5. Nilai dari g(-3) adalah...", options: ["-1", "11", "-11", "1"], ans: 1, exp: "g(-3) = -2(-3) + 5 = 6 + 5 = 11." },
+      { id: 23, level: 3, q: "Diketahui f(x) = 5 - 4x. Nilai dari f(2) adalah...", options: ["3", "-3", "13", "-13"], ans: 1, exp: "f(2) = 5 - 4(2) = 5 - 8 = -3." },
+      { id: 24, level: 3, q: "Diketahui g(x) = x² - 3. Nilai dari g(5) adalah...", options: ["22", "25", "28", "10"], ans: 0, exp: "g(5) = 5² - 3 = 25 - 3 = 22." },
+      { id: 25, level: 3, q: "Berapakah hasil dari perkalian tanda: (-3) × (-4)?", options: ["-12", "12", "-7", "7"], ans: 1, exp: "Negatif dikali negatif hasilnya positif (-3)×(-4) = 12." },
+      { id: 26, level: 3, q: "Berapakah hasil dari operasi: 5 × (-6)?", options: ["30", "-30", "-11", "11"], ans: 1, exp: "Positif dikali negatif hasilnya negatif: 5 × (-6) = -30." },
+      { id: 27, level: 3, q: "Diketahui f(x) = 2x² + x - 3. Nilai f(-2) adalah...", options: ["3", "5", "-3", "-5"], ans: 0, exp: "f(-2) = 2(-2)² + (-2) - 3 = 2(4) - 2 - 3 = 8 - 5 = 3." },
+      { id: 28, level: 3, q: "Jika f(x) = 7x + 10, maka nilai f(0) adalah...", options: ["0", "7", "10", "17"], ans: 2, exp: "f(0) = 7(0) + 10 = 10." },
+      { id: 29, level: 3, q: "Diketahui h(x) = -5x - 8. Nilai h(-2) adalah...", options: ["2", "-2", "18", "-18"], ans: 0, exp: "h(-2) = -5(-2) - 8 = 10 - 8 = 2." },
+      { id: 30, level: 3, q: "Dalam pengerjaan substitusi nilai fungsi, operasi apa yang harus diserang/dikerjakan terlebih dahulu?", options: ["Penjumlahan", "Pengurangan", "Perkalian / Pangkat", "Bebas urutannya"], ans: 2, exp: "Perkalian dan perpangkatan harus didahulukan sebelum penjumlahan/pengurangan." },
+
+      // LEVEL 4 (Subtitusi Advance)
+      { id: 31, level: 4, q: "Diketahui f(x) = 2x + 3. Jika f(x) = 11, maka nilai x adalah...", options: ["3", "4", "5", "7"], ans: 1, exp: "2x + 3 = 11 -> 2x = 8 -> x = 4." },
+      { id: 32, level: 4, q: "Diketahui f(x) = 5x - 4. Jika f(a) = 21, maka nilai a adalah...", options: ["4", "5", "6", "3"], ans: 1, exp: "5a - 4 = 21 -> 5a = 25 -> a = 5." },
+      { id: 33, level: 4, q: "Diketahui f(x) = (2x - 2) / 4. Jika f(k) = 3, tentukan nilai k!", options: ["5", "6", "7", "8"], ans: 2, exp: "(2k - 2)/4 = 3 -> 2k - 2 = 12 -> 2k = 14 -> k = 7." },
+      { id: 34, level: 4, q: "Suatu fungsi linear f(x) = ax + b. Jika f(2) = 5 dan f(5) = 14, tentukan nilai a!", options: ["2", "3", "4", "5"], ans: 1, exp: "Eliminasi: 5a+b=14 dikurangi 2a+b=5 -> 3a=9 -> a=3." },
+      { id: 35, level: 4, q: "Dari soal nomor 34 (f(2)=5 dan f(5)=14), berapakah nilai b?", options: ["-1", "1", "2", "-2"], ans: 0, exp: "Substitusi a=3 ke 2(3)+b=5 -> 6+b=5 -> b = -1." },
+      { id: 36, level: 4, q: "Jika f(x) = ax + b dengan f(1) = 3 dan f(3) = 7, maka rumus fungsi f(x) adalah...", options: ["f(x) = 2x + 1", "f(x) = 3x - 1", "f(x) = 2x - 1", "f(x) = x + 2"], ans: 0, exp: "a = (7-3)/(3-1) = 4/2 = 2. f(1)=2(1)+b=3 -> b=1. Jadi f(x)=2x+1." },
+      { id: 37, level: 4, q: "Diketahui f(x) = 3x + b. Jika f(4) = 15, maka nilai b adalah...", options: ["1", "2", "3", "4"], ans: 2, exp: "3(4) + b = 15 -> 12 + b = 15 -> b = 3." },
+      { id: 38, level: 4, q: "Jika bayangan dari 3 oleh fungsi f(x) = ax - 2 adalah 10, tentukan nilai a!", options: ["3", "4", "5", "6"], ans: 1, exp: "a(3) - 2 = 10 -> 3a = 12 -> a = 4." },
+      { id: 39, level: 4, q: "Diketahui f(x) = -4x + c. Jika f(-2) = 15, tentukan nilai c!", options: ["5", "7", "-7", "11"], ans: 1, exp: "-4(-2) + c = 15 -> 8 + c = 15 -> c = 7." },
+      { id: 40, level: 4, q: "Jika f(x) = 6 - 2x dan f(m) = -10, berapakah nilai m?", options: ["6", "7", "8", "-8"], ans: 2, exp: "6 - 2m = -10 -> -2m = -16 -> m = 8." },
+
+      // LEVEL 5 (Pemodelan Matematika)
+      { id: 41, level: 5, q: "Tarif taksi: buka pintu Rp10.000 dan Rp4.000 per km. Rumus fungsi biaya f(x) untuk x km adalah...", options: ["f(x) = 10.000x + 4.000", "f(x) = 4.000x + 10.000", "f(x) = 14.000x", "f(x) = 4.000x - 10.000"], ans: 1, exp: "Biaya variabel 4000 per km ditambah biaya tetap awal 10000 -> f(x) = 4000x + 10000." },
+      { id: 42, level: 5, q: "Dari soal nomor 41, berapa biaya taksi untuk perjalanan sejauh 15 km?", options: ["Rp 60.000", "Rp 70.000", "Rp 75.000", "Rp 80.000"], ans: 1, exp: "f(15) = 4.000(15) + 10.000 = 60.000 + 10.000 = Rp70.000." },
+      { id: 43, level: 5, q: "Sewa sepeda motor: biaya awal Rp20.000 dan biaya tambahan Rp5.000/jam. Tentukan total biaya jika menyewa selama 8 jam!", options: ["Rp 50.000", "Rp 60.000", "Rp 70.000", "Rp 80.000"], ans: 1, exp: "f(8) = 5.000(8) + 20.000 = 40.000 + 20.000 = Rp60.000." },
+      { id: 44, level: 5, q: "Siti menabung: bulan ke-1 Rp5.000, bulan ke-2 Rp8.000, bulan ke-3 Rp11.000. Berapa besar tabungan khusus bulan ke-12?", options: ["Rp 35.000", "Rp 38.000", "Rp 40.000", "Rp 42.000"], ans: 1, exp: "f(n) = 3.000n + 2.000. f(12) = 3.000(12) + 2.000 = 36.000 + 2.000 = Rp38.000." },
+      { id: 45, level: 5, q: "Suhu pada ketinggian x km dirumuskan T(x) = 30 - 5x (°C). Berapa suhu pada ketinggian 4 km?", options: ["5°C", "10°C", "15°C", "20°C"], ans: 1, exp: "T(4) = 30 - 5(4) = 30 - 20 = 10°C." },
+      { id: 46, level: 5, q: "Perusahaan taksi online memasang tarif f(x) = 3.500x + 7.000. Jika Andi membayar Rp42.000, berapa km jarak perjalanannya?", options: ["8 km", "9 km", "10 km", "12 km"], ans: 2, exp: "3.500x + 7.000 = 42.000 -> 3.500x = 35.000 -> x = 10 km." },
+      { id: 47, level: 5, q: "Produksi pabrik mainan dirumuskan f(t) = 50t + 200 unit. Berapa total produksi selama 10 hari?", options: ["500 unit", "700 unit", "750 unit", "800 unit"], ans: 1, exp: "f(10) = 50(10) + 200 = 500 + 200 = 700 unit." },
+      { id: 48, level: 5, q: "Pulsa telepon: tarif awal koneksi Rp1.000 dan Rp500 per menit. Rumus biaya telepon f(m) untuk m menit adalah...", options: ["f(m) = 1.000m + 500", "f(m) = 500m + 1.000", "f(m) = 1.500m", "f(m) = 500m - 1.000"], ans: 1, exp: "f(m) = 500m + 1.000." },
+      { id: 49, level: 5, q: "Dari soal nomor 48, berapa total biaya untuk panggilan selama 20 menit?", options: ["Rp 10.000", "Rp 11.000", "Rp 12.000", "Rp 15.000"], ans: 1, exp: "f(20) = 500(20) + 1.000 = 10.000 + 1.000 = Rp11.000." },
+      { id: 50, level: 5, q: "Toko cetak foto: biaya desain Rp15.000 ditambah Rp2.000 per lembar foto. Berapa biaya untuk mencetak 25 lembar foto?", options: ["Rp 60.000", "Rp 65.000", "Rp 70.000", "Rp 75.000"], ans: 1, exp: "f(25) = 2.000(25) + 15.000 = 50.000 + 15.000 = Rp65.000." }
+    ];
+
+    // RENDER QUIZ
+    function renderQuiz(filter = 'all') {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = '';
+
+      const levelsToRender = filter === 'all' ? [1, 2, 3, 4, 5] : [parseInt(filter)];
+
+      levelsToRender.forEach(lvl => {
+        const levelQuestions = quizData.filter(q => q.level === lvl);
+        if (levelQuestions.length === 0) return;
+
+        const levelWrapper = document.createElement('div');
+        levelWrapper.className = "bg-indigo-950 p-6 rounded-2xl border-2 border-indigo-800 space-y-4";
+
+        let titleText = `Level ${lvl}`;
+        if(lvl === 1) titleText = `Level 1: Materi 1. Konsep Dasar (Relasi & Unsur Fungsi)`;
+        if(lvl === 2) titleText = `Level 2: Materi 2. Syarat Fungsi (Analisis Jomblo vs Cabang)`;
+        if(lvl === 3) titleText = `Level 3: Materi 3. Subtitusi Dasar (Perhitungan Nilai Fungsi)`;
+        if(lvl === 4) titleText = `Level 4: Materi 4. Subtitusi Advance (Pembalikan Variabel & Rumus)`;
+        if(lvl === 5) titleText = `Level 5: Materi 5. Pemodelan Matematika (Soal Cerita Aplikatif)`;
+
+        levelWrapper.innerHTML = `
+          <div class="border-b border-indigo-800 pb-3 flex justify-between items-center">
+            <h3 class="font-game text-xl text-amber-300">${titleText}</h3>
+            <span class="text-xs bg-indigo-900 text-pink-300 px-3 py-1 rounded-full border border-indigo-700 font-bold">${levelQuestions.length} Soal</span>
+          </div>
+          <div class="space-y-4" id="questions-lvl-${lvl}"></div>
+          
+          <!-- BUTTON UNLOCK WORLD AT BOTTOM OF LEVEL -->
+          <div class="pt-4 border-t border-indigo-800 flex justify-center">
+            <button onclick="unlockWorld(${lvl})" id="btn-unlock-${lvl}" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-indigo-950 font-game px-6 py-3 rounded-2xl shadow-xl hover:scale-105 transition font-bold text-sm flex items-center gap-2 border-2 border-white/40">
+              🔓 UNLOCK WORLD ${lvl} DI QUEST MAP (+100 XP)
+            </button>
+          </div>
+        `;
+
+        container.appendChild(levelWrapper);
+
+        const qContainer = levelWrapper.querySelector(`#questions-lvl-${lvl}`);
+        levelQuestions.forEach(q => {
+          const card = document.createElement('div');
+          card.className = "bg-indigo-900/50 p-4 rounded-xl border border-indigo-700 space-y-3";
+          card.innerHTML = `
+            <p class="text-sm text-indigo-100 font-medium"><span class="text-amber-300 font-bold">Soal #${q.id}:</span> ${q.q}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1">
+              ${q.options.map((opt, i) => `
+                <button onclick="checkAnswer(${q.id},${i}, this)" class="text-left px-4 py-2.5 rounded-xl bg-indigo-950 hover:bg-indigo-800 border border-indigo-700 text-xs text-indigo-200 transition font-medium">
+                  <span class="font-bold text-amber-300 mr-2">${String.fromCharCode(65 + i)}.</span>${opt}
+                </button>
+              `).join('')}
+            </div>
+            <div id="exp-${q.id}" class="hidden mt-3 p-3 rounded-xl bg-indigo-950/80 border border-indigo-700 text-xs text-indigo-200"></div>
+          `;
+          qContainer.appendChild(card);
+        });
+      });
+    }
+
+    // CHECK ANSWER
+    function checkAnswer(questionId, selectedIdx, btnElement) {
+      const q = quizData.find(item => item.id === questionId);
+      const parent = btnElement.parentElement;
+      const buttons = parent.querySelectorAll('button');
+      
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === q.ans) {
+          b.className = "text-left px-4 py-2.5 rounded-xl bg-emerald-600/40 border border-emerald-500 text-xs text-emerald-200 font-medium";
+        } else if (idx === selectedIdx) {
+          b.className = "text-left px-4 py-2.5 rounded-xl bg-pink-600/40 border border-pink-500 text-xs text-pink-200 font-medium";
+        } else {
+          b.className = "text-left px-4 py-2.5 rounded-xl bg-indigo-950/30 border border-indigo-800 text-xs text-indigo-400 opacity-50 font-medium";
+        }
+      });
+
+      const expBox = document.getElementById(`exp-${questionId}`);
+      expBox.classList.remove('hidden');
+      if (selectedIdx === q.ans) {
+        expBox.innerHTML = `<span class="text-emerald-400 font-bold">🎉 Benar!</span> ${q.exp}`;
+      } else {
+        expBox.innerHTML = `<span class="text-pink-400 font-bold">❌ Kurang Tepat.</span> ${q.exp}`;
+      }
+    }
+
+    // UNLOCK WORLD IN QUEST MAP
+    function unlockWorld(levelNum) {
+      if (!unlockedWorlds.includes(levelNum)) {
+        unlockedWorlds.push(levelNum);
+        currentXP += 100;
+        document.getElementById('user-xp').innerText = `${currentXP} XP`;
+      }
+
+      const worldCard = document.getElementById(`world-card-${levelNum}`);
+      const worldIcon = document.getElementById(`world-icon-${levelNum}`);
+      const worldStatus = document.getElementById(`world-status-${levelNum}`);
+
+      if (worldCard) {
+        worldCard.classList.remove('opacity-70', 'bg-indigo-950/80', 'border-indigo-800');
+        worldCard.classList.add('bg-emerald-900/40', 'border-2', 'border-emerald-400', 'shadow-lg');
+      }
+      if (worldIcon) {
+        worldIcon.className = "w-12 h-12 bg-emerald-500 text-indigo-950 rounded-2xl flex items-center justify-center font-game text-2xl shadow-md border-2 border-white";
+        const icons = {1: '🎒', 2: '⚖️', 3: '🔢', 4: '⚙️', 5: '🚀'};
+        worldIcon.innerText = icons[levelNum] || '⭐';
+      }
+      if (worldStatus) {
+        worldStatus.innerText = "Status: Terbuka (+100 XP Klaim!)";
+        worldStatus.className = "text-xs text-emerald-300 font-bold";
+      }
+
+      const btn = document.getElementById(`btn-unlock-${levelNum}`);
+      if (btn) {
+        btn.innerText = `✅ WORLD ${levelNum} UNLOCKED! (+100 XP)`;
+        btn.className = "bg-emerald-600 text-white font-game px-6 py-3 rounded-2xl font-bold text-sm cursor-default border-2 border-emerald-400";
+        btn.disabled = true;
+      }
+
+      alert(`🎉 Selamat! Kamu telah meng-unlock World ${levelNum} di Quest Map dan mendapatkan +100 XP!`);
+    }
+
+    function filterLevel(lvl) {
+      renderQuiz(lvl);
+    }
+
+    // INITIAL LOAD
+    window.onload = function() {
+      renderQuiz('all');
+    };
+  </script>
+</body>
+</html>
